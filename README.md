@@ -6,24 +6,27 @@
   <img src="https://img.shields.io/badge/STIX%202.1-TIP%20Feed-orange?style=for-the-badge&logo=json&logoColor=white" alt="STIX 2.1"/>
   <img src="https://img.shields.io/badge/Data-100%25%20Real--World-critical?style=for-the-badge&logo=databricks&logoColor=white" alt="Real-World Data"/>
   <img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge" alt="License: MIT"/>
+  <img src="https://img.shields.io/badge/PRs-Welcome-blueviolet?style=for-the-badge&logo=github" alt="PRs Welcome"/>
 </p>
 
 <h1 align="center">🍯 Honeypot Threat Intelligence Platform</h1>
 
 <p align="center">
-  <strong>Deception-Based Threat Detection · Real Attacker TTP Analysis · Structured Threat Intelligence Feed · Publishable Research</strong>
+  <strong>Deception-Based Threat Detection &nbsp;&middot;&nbsp; Real Attacker TTP Analysis &nbsp;&middot;&nbsp; Structured Threat Intelligence Feed &nbsp;&middot;&nbsp; Publishable Research</strong>
 </p>
 
 <p align="center">
-  <a href="#-project-overview">Overview</a> ·
-  <a href="#-architecture">Architecture</a> ·
-  <a href="#-technical-stack">Tech Stack</a> ·
-  <a href="#-quick-start">Quick Start</a> ·
-  <a href="#-30-day-findings">Findings</a> ·
-  <a href="#-mitre-attck-ttp-mapping">TTPs</a> ·
-  <a href="#-threat-intelligence-feed">TIP Feed</a> ·
-  <a href="#-research-paper">Research</a> ·
-  <a href="#%EF%B8%8F-ethics--legal">Ethics</a>
+  <a href="#-project-overview">📌 Overview</a> &nbsp;&middot;&nbsp;
+  <a href="#%EF%B8%8F-architecture">🏗️ Architecture</a> &nbsp;&middot;&nbsp;
+  <a href="#-technical-stack">🔧 Tech Stack</a> &nbsp;&middot;&nbsp;
+  <a href="#-quick-start">⚡ Quick Start</a> &nbsp;&middot;&nbsp;
+  <a href="#-30-day-findings">📊 Findings</a> &nbsp;&middot;&nbsp;
+  <a href="#-mitre-attck-ttp-mapping">🧩 TTPs</a> &nbsp;&middot;&nbsp;
+  <a href="#-threat-intelligence-feed">📡 TIP Feed</a> &nbsp;&middot;&nbsp;
+  <a href="#-research-paper">📝 Research</a> &nbsp;&middot;&nbsp;
+  <a href="#%EF%B8%8F-ethics--legal">⚠️ Ethics</a> &nbsp;&middot;&nbsp;
+  <a href="CONTRIBUTING.md">🤝 Contributing</a> &nbsp;&middot;&nbsp;
+  <a href="LICENSE">📜 License</a>
 </p>
 
 ---
@@ -36,13 +39,13 @@ The platform automatically ingests all captured events into an **ELK Stack** (El
 
 ### Why This Project Matters
 
-| Dimension | Value |
+| Audience | Value Delivered |
 |---|---|
-| **For Defenders** | Understand real attacker TTPs to improve detection rules and alert logic |
-| **For Threat Intelligence Teams** | A live, continuously updated IOC feed with STIX 2.1 / MISP compatibility |
-| **For Researchers** | Publishable dataset of >500,000 real attack events with full provenance |
-| **For SOC Analysts** | Practice triage and analysis on authentic, unfiltered attacker data |
-| **For Portfolio** | End-to-end blue team project covering deployment, analysis, and intelligence production |
+| **Defenders & Blue Teamers** | Understand real attacker TTPs to sharpen detection rules and alert logic |
+| **Threat Intelligence Teams** | A live, continuously updated IOC feed in STIX 2.1 / MISP-compatible format |
+| **Security Researchers** | Publishable dataset of >500,000 real attack events with full provenance |
+| **SOC Analysts** | Practice triage on authentic, unfiltered attacker telemetry |
+| **Students & Portfolio Builders** | End-to-end blue team project: deployment → analysis → intelligence production |
 
 ---
 
@@ -50,41 +53,41 @@ The platform automatically ingests all captured events into an **ELK Stack** (El
 
 ```
 ┌──────────────────────────────────────────────────────────────────┐
-│                   PUBLIC INTERNET (Threat Actors)                │
-│       Scanners · Botnets · Exploit Kits · Brute-Forcers          │
+|                   PUBLIC INTERNET (Threat Actors)                |
+|       Scanners  .  Botnets  .  Exploit Kits  .  Brute-Forcers    |
 └──────────────────────────┬───────────────────────────────────────┘
-                           │  Unsolicited inbound traffic
-                ┌──────────▼──────────┐
-                │     T-Pot VM         │   Ubuntu 22.04 LTS
-                │   (Docker Stack)     │   8GB RAM · 100GB SSD
-                │─────────────────────│
-                │ Cowrie      (SSH/Telnet)  │
-                │ Dionaea     (SMB/FTP/HTTP)│
-                │ Glastopf    (HTTP Web)    │
-                │ Heralding   (Multi-Port)  │
-                │ ADBHoney    (Android ADB) │
-                │ CitrixHoneypot (CVE traps)│
-                └──────────┬──────────┘
-                           │  JSON event logs → Logstash
-                ┌──────────▼──────────────┐
-                │       ELK Stack          │
-                │  Elasticsearch 8.x       │
-                │  Logstash Pipelines      │
-                │  Kibana Dashboards       │
-                └──────────┬──────────────┘
-                           │  Enrichment pipeline
-          ┌────────────────▼─────────────────────┐
-          │      Threat Enrichment Engine         │
-          │  Shodan API · AbuseIPDB · VirusTotal  │
-          │  Geo-IP Mapping · ASN Lookup          │
-          │  WHOIS · Passive DNS                  │
-          └────────────────┬─────────────────────┘
-                           │  Structured output
-               ┌───────────▼───────────┐
-               │   STIX 2.1 TIP Feed   │
-               │  MISP Export · JSON   │
-               │  IOC CSV · Reports    │
-               └───────────────────────┘
+                            | Unsolicited inbound traffic only
+                 ┌─────────▼─────────┐
+                 |     T-Pot VM (Ubuntu 22.04)    |
+                 |       Docker Orchestration     |
+                 |                               |
+                 | Cowrie       SSH / Telnet      |
+                 | Dionaea      SMB / FTP / HTTP  |
+                 | Glastopf     HTTP Web App      |
+                 | Heralding    Multi-Protocol    |
+                 | ADBHoney     Android ADB       |
+                 | CitrixHoneypot  CVE Traps      |
+                 └─────────┬─────────┘
+                           | JSON event logs
+                 ┌─────────▼─────────┐
+                 |         ELK Stack             |
+                 | Elasticsearch 8.x             |
+                 | Logstash Pipelines            |
+                 | Kibana Dashboards             |
+                 └─────────┬─────────┘
+                           | Enrichment pipeline
+          ┌───────────────▼───────────────┐
+          |      Threat Enrichment Engine        |
+          | Shodan API   AbuseIPDB  VirusTotal    |
+          | Geo-IP Mapping   ASN Lookup           |
+          | WHOIS   Passive DNS Resolution        |
+          └───────────────┬───────────────┘
+                           | Structured output
+               ┌─────────▼─────────┐
+               |    STIX 2.1 TIP Feed        |
+               | MISP Export . JSON . CSV    |
+               | IOC Reports . Research PDF  |
+               └─────────────────────┘
 ```
 
 > **Design principle:** The honeypot is **fully passive** — it only captures and logs inbound unsolicited connections. No outbound attacks are ever launched from this infrastructure.
@@ -96,17 +99,17 @@ The platform automatically ingests all captured events into an **ELK Stack** (El
 | Layer | Tool / Technology | Purpose |
 |---|---|---|
 | **Honeypot Framework** | T-Pot 23.x (Docker-based) | Multi-service honeypot orchestration |
-| **SSH/Telnet Trap** | Cowrie | Credential capture, session recording |
-| **SMB/FTP Trap** | Dionaea | Malware sample collection, exploit capture |
-| **HTTP Web Trap** | Glastopf | Web scanner & exploit traffic |
+| **SSH / Telnet Trap** | Cowrie | Credential capture, session logging |
+| **SMB / FTP Trap** | Dionaea | Malware sample collection, exploit capture |
+| **HTTP Web Trap** | Glastopf | Web scanner and web exploit traffic |
 | **Multi-Port Trap** | Heralding | Credential logging across 15+ protocols |
-| **Data Pipeline** | ELK Stack (ES 8.x + Logstash + Kibana) | Ingest, index, visualize |
-| **Threat Enrichment** | Shodan API, AbuseIPDB, VirusTotal API | IP reputation, geolocation, file hashes |
-| **TIP Format** | STIX 2.1 / TAXII 2.0 | Standardized threat intel sharing |
-| **MISP Integration** | MISP-compatible JSON export | Community threat sharing |
+| **Data Pipeline** | ELK Stack (ES 8.x + Logstash + Kibana) | Ingest, index, visualize events |
+| **Threat Enrichment** | Shodan API · AbuseIPDB · VirusTotal | IP reputation, geolocation, file hashes |
+| **TIP Format** | STIX 2.1 / TAXII 2.0 | Standardized threat intelligence sharing |
+| **MISP Integration** | MISP-compatible JSON export | Community threat sharing platform |
 | **Analysis** | Python 3.12 · Pandas · GeoPandas · Matplotlib | Statistical analysis and visualization |
-| **Infrastructure** | Ubuntu 22.04 LTS on AWS / DigitalOcean / Hetzner VPS | Cloud-hosted honeypot |
-| **Visualization** | Kibana Dashboards · Attack Origin Geo Maps | Real-time monitoring |
+| **Infrastructure** | Ubuntu 22.04 LTS on AWS / DigitalOcean / Hetzner | Cloud-hosted honeypot deployment |
+| **Dashboards** | Kibana · Attack Origin Geo Maps | Real-time monitoring and exploration |
 
 ---
 
@@ -114,44 +117,44 @@ The platform automatically ingests all captured events into an **ELK Stack** (El
 
 ```
 honeypot-threat-intelligence/
-│
-├── deployment/                    # T-Pot installation & configuration
-│   ├── tpot-setup.sh              # Automated T-Pot deployment script
-│   ├── docker-override.yml        # Custom service configurations
-│   ├── firewall-rules.conf        # iptables rules for honeypot isolation
-│   └── cloud-init.yml             # Cloud VM bootstrap configuration
-│
-├── analysis/                      # Python analysis & enrichment scripts
-│   ├── ttp_extractor.py           # MITRE ATT&CK TTP mapping engine
-│   ├── ioc_aggregator.py          # IOC collection & deduplication
-│   ├── enrichment.py              # Shodan / AbuseIPDB / VT API integration
-│   ├── geo_visualizer.py          # Attack origin geographic mapping
-│   ├── cluster_analysis.py        # Attacker behavior clustering (KMeans)
-│   └── requirements.txt           # Python dependencies
-│
-├── tip-feed/                      # Threat Intelligence Feed output
-│   ├── stix-bundles/              # STIX 2.1 JSON bundles (auto-generated)
-│   ├── stix_generator.py          # STIX 2.1 object generator
-│   ├── misp_export.py             # MISP-compatible export module
-│   └── taxii_server.py            # Local TAXII 2.0 server (optional)
-│
-├── dashboards/                    # Kibana dashboard exports (NDJSON)
-│   ├── attack-overview.ndjson     # Main attack metrics dashboard
-│   ├── geo-attack-map.ndjson      # Geographic origin heatmap
-│   └── ttp-timeline.ndjson        # TTP activity timeline
-│
-├── data/                          # Anonymized sample datasets
-│   ├── sample_events.json         # Sample attack events (sanitized)
-│   └── aggregated_stats.csv       # 30-day aggregated statistics
-│
-├── report/                        # Research paper & supporting figures
-│   ├── honeypot_research_paper.pdf
-│   └── figures/                   # Charts, heatmaps, TTP visualizations
-│
-├── .env.example                   # Environment variable template
-├── CONTRIBUTING.md                # Contribution guidelines
-├── LICENSE                        # MIT License
-└── README.md
+|
++-- deployment/                    # T-Pot installation & configuration
+|   +-- tpot-setup.sh              # Automated T-Pot deployment script
+|   +-- docker-override.yml        # Custom service configurations
+|   +-- firewall-rules.conf        # iptables rules for honeypot isolation
+|   +-- cloud-init.yml             # Cloud VM bootstrap configuration
+|
++-- analysis/                      # Python analysis & enrichment scripts
+|   +-- ttp_extractor.py           # MITRE ATT&CK TTP mapping engine
+|   +-- ioc_aggregator.py          # IOC collection & deduplication
+|   +-- enrichment.py              # Shodan / AbuseIPDB / VT API integration
+|   +-- geo_visualizer.py          # Attack origin geographic mapping
+|   +-- cluster_analysis.py        # Attacker behavior clustering (K-Means)
+|   +-- requirements.txt           # Python dependencies
+|
++-- tip-feed/                      # Threat Intelligence Feed output
+|   +-- stix-bundles/              # STIX 2.1 JSON bundles (auto-generated)
+|   +-- stix_generator.py          # STIX 2.1 object generator
+|   +-- misp_export.py             # MISP-compatible export module
+|   +-- taxii_server.py            # Local TAXII 2.0 server (optional)
+|
++-- dashboards/                    # Kibana dashboard exports (NDJSON)
+|   +-- attack-overview.ndjson
+|   +-- geo-attack-map.ndjson
+|   +-- ttp-timeline.ndjson
+|
++-- data/                          # Anonymized sample datasets
+|   +-- sample_events.json         # Sample attack events (sanitized IPs)
+|   +-- aggregated_stats.csv       # 30-day aggregated statistics
+|
++-- report/                        # Research paper & supporting figures
+|   +-- honeypot_research_paper.pdf
+|   +-- figures/                   # Charts, heatmaps, TTP visualizations
+|
++-- .env.example                   # Environment variable template
++-- CONTRIBUTING.md                # Contribution guidelines
++-- LICENSE                        # MIT License + CC BY 4.0 (Dataset)
++-- README.md
 ```
 
 ---
@@ -163,19 +166,19 @@ honeypot-threat-intelligence/
 Before deploying, ensure you have:
 
 - **VPS / Cloud VM** running Ubuntu 22.04 LTS
-  - Minimum: **8GB RAM · 4 vCPU · 100GB SSD**
-  - Recommended: **16GB RAM · 8 vCPU · 200GB SSD** for 30-day collection
+  - Minimum: **8 GB RAM · 4 vCPU · 100 GB SSD**
+  - Recommended: **16 GB RAM · 8 vCPU · 200 GB SSD** for 30-day collection
   - Supported providers: AWS EC2, DigitalOcean Droplet, Hetzner Cloud, Vultr
-- **Docker Engine** ≥ 24.x and **Docker Compose** v2
+- **Docker Engine** >= 24.x and **Docker Compose** v2
 - **Python** 3.10 or higher
 - **API Keys** (free tiers available):
   - [Shodan](https://account.shodan.io/) — for IP scanning context
   - [AbuseIPDB](https://www.abuseipdb.com/api) — for IP reputation scoring
   - [VirusTotal](https://developers.virustotal.com/) — for malware hash lookups
-- A **dedicated IP address** with no prior history (clean reputation)
-- Port `64297` (T-Pot management UI) accessible only from your IP
+- A **dedicated IP address** with no prior abuse history
+- Management port `64297` accessible only from your own IP
 
-> ⚠️ **Important:** Never deploy T-Pot on a machine that hosts production services. Use a **dedicated VM** for this purpose only.
+> **Warning:** Never deploy T-Pot on a machine that hosts any other production services. Use a **dedicated, isolated VM** for this project only.
 
 ---
 
@@ -186,8 +189,6 @@ git clone https://github.com/ChandraVerse/honeypot-threat-intelligence.git
 cd honeypot-threat-intelligence
 ```
 
----
-
 ### Step 2 — Deploy T-Pot
 
 ```bash
@@ -197,18 +198,16 @@ sudo ./tpot-setup.sh
 ```
 
 The setup script will:
-1. Update and harden the OS (disable unused services, configure SSH)
-2. Install Docker Engine and Docker Compose
-3. Pull and configure T-Pot 23.x
-4. Apply firewall rules that expose honeypot ports while protecting management
-5. Start all honeypot services automatically on reboot
+1. Update and harden the OS (disable unused services, configure SSH key-only auth)
+2. Install Docker Engine and Docker Compose v2
+3. Pull and configure T-Pot 23.x with all honeypot services
+4. Apply firewall rules exposing honeypot ports while protecting the management interface
+5. Configure systemd to auto-start T-Pot on every reboot
 
-After deployment, access the T-Pot management UI at:
+Access the T-Pot management UI after deployment:
 ```
 https://<YOUR-VPS-IP>:64297
 ```
-
----
 
 ### Step 3 — Configure Environment Variables
 
@@ -217,7 +216,6 @@ cp .env.example .env
 nano .env
 ```
 
-Fill in your API credentials:
 ```env
 SHODAN_API_KEY=your_shodan_key_here
 ABUSEIPDB_API_KEY=your_abuseipdb_key_here
@@ -226,8 +224,6 @@ ELASTICSEARCH_HOST=localhost
 ELASTICSEARCH_PORT=9200
 GEO_DB_PATH=./data/GeoLite2-City.mmdb
 ```
-
----
 
 ### Step 4 — Run the Analysis Pipeline
 
@@ -250,8 +246,6 @@ python enrichment.py --input ../data/aggregated_stats.csv
 python geo_visualizer.py --output ../report/figures/
 ```
 
----
-
 ### Step 5 — Generate STIX 2.1 Threat Intelligence Feed
 
 ```bash
@@ -265,21 +259,18 @@ python stix_generator.py \
 python misp_export.py --stix-dir stix-bundles/ --output misp_events.json
 ```
 
----
-
 ### Step 6 — Import Kibana Dashboards
 
-In your Kibana instance (port `5601`):
-
-1. Go to **Stack Management → Saved Objects → Import**
-2. Upload each `.ndjson` file from the `dashboards/` folder
-3. Set the correct index pattern (`logstash-*`)
+1. Open Kibana at `http://<YOUR-VPS-IP>:5601`
+2. Navigate to **Stack Management → Saved Objects → Import**
+3. Upload each `.ndjson` file from the `dashboards/` folder
+4. Set the index pattern to `logstash-*`
 
 ---
 
 ## 📊 30-Day Findings
 
-> Results from a live 30-day deployment. All IP data in public samples is partially anonymized per responsible disclosure practices.
+> All IP addresses in public sample data are partially anonymized per responsible disclosure practices.
 
 | Metric | Observed Value |
 |---|---|
@@ -290,56 +281,54 @@ In your Kibana instance (port `5601`):
 | **MITRE TTPs Mapped** | T1078, T1059, T1110, T1046, T1190, T1090 |
 | **IOCs Extracted** | `8,000+` IPs · `300+` file hashes · `150+` domains |
 | **Malicious Payloads Captured** | `150+` unique malware samples |
-| **Most Active Attack Window** | 02:00–06:00 UTC (automated scanning bots) |
-| **Credential Spray Attempts** | `45,000+` unique username/password combos |
+| **Peak Attack Window** | 02:00–06:00 UTC (automated scanning bots) |
+| **Credential Spray Attempts** | `45,000+` unique username/password combinations |
 
 ---
 
 ## 🧩 MITRE ATT&CK TTP Mapping
 
-The following tactics and techniques were observed during the observation period, ranked by frequency:
+All observed techniques, ranked by frequency of occurrence during the 30-day window:
 
 ```
 INITIAL ACCESS
-  ├── T1190  Exploit Public-Facing Application       ████████████░░  (High)
-  └── T1078  Valid Accounts (Credential Brute Force) ██████████████  (Critical)
+  +-- T1190  Exploit Public-Facing Application       [############--]  High
+  +-- T1078  Valid Accounts (Credential Abuse)        [##############]  Critical
 
 EXECUTION
-  └── T1059  Command and Scripting Interpreter        ████████░░░░░░  (Medium)
+  +-- T1059  Command and Scripting Interpreter        [########------]  Medium
 
 DISCOVERY
-  └── T1046  Network Service Scanning                 ██████████████  (Critical)
+  +-- T1046  Network Service Scanning                 [##############]  Critical
 
 CREDENTIAL ACCESS
-  └── T1110  Brute Force (SSH / RDP / FTP)            ██████████████  (Critical)
+  +-- T1110  Brute Force (SSH / RDP / FTP)            [##############]  Critical
 
 COMMAND & CONTROL
-  └── T1090  Proxy / TOR Exit Node Usage              ██████░░░░░░░░  (Medium)
+  +-- T1090  Proxy / TOR Exit Node Usage              [######--------]  Medium
 
 COLLECTION
-  └── T1119  Automated Collection (Bot activity)      █████████░░░░░  (High)
+  +-- T1119  Automated Collection (Bot Activity)      [#########-----]  High
 ```
 
-All TTP mappings are included in the STIX 2.1 bundles as `attack-pattern` objects with MITRE ATT&CK IDs and external references.
+All TTP mappings are included in the STIX 2.1 bundles as `attack-pattern` objects with full MITRE ATT&CK external references.
 
 ---
 
 ## 📡 Threat Intelligence Feed
 
-### STIX 2.1 Bundle Structure
+### STIX 2.1 Bundle Object Types
 
-The generated feed follows the [STIX 2.1 specification](https://oasis-open.github.io/cti-documentation/stix/intro) and contains:
-
-| Object Type | Description |
+| STIX Object Type | Description |
 |---|---|
-| `indicator` | Malicious IPs, file hashes, domain names with detection patterns |
+| `indicator` | Malicious IPs, file hashes, domains with detection patterns |
 | `attack-pattern` | MITRE ATT&CK technique mappings |
-| `threat-actor` | Clustered attacker profiles based on behavior |
+| `threat-actor` | Clustered attacker profiles based on behavioral similarity |
 | `malware` | Identified malware families from captured payloads |
-| `relationship` | Connects indicators → TTPs → threat actors |
+| `relationship` | Links indicators → TTPs → threat actors |
 | `observed-data` | Raw observation metadata with timestamps |
 
-### Sample STIX Bundle
+### Sample STIX 2.1 Bundle
 
 ```json
 {
@@ -350,7 +339,7 @@ The generated feed follows the [STIX 2.1 specification](https://oasis-open.githu
     {
       "type": "indicator",
       "spec_version": "2.1",
-      "id": "indicator--<uuid>",
+      "id": "indicator--<uuid4>",
       "name": "Malicious SSH Brute-Force Source IP",
       "pattern_type": "stix",
       "pattern": "[ipv4-addr:value = '1.2.3.45']",
@@ -363,91 +352,79 @@ The generated feed follows the [STIX 2.1 specification](https://oasis-open.githu
       "spec_version": "2.1",
       "name": "Brute Force: Password Spraying",
       "external_references": [
-        {
-          "source_name": "mitre-attack",
-          "external_id": "T1110.003"
-        }
+        { "source_name": "mitre-attack", "external_id": "T1110.003" }
       ]
     }
   ]
 }
 ```
 
-### Feed Update Frequency
+### Feed Versioning
 
-The STIX bundles in `tip-feed/stix-bundles/` are regenerated daily during active collection. Each bundle is versioned with an ISO 8601 timestamp in the filename:
+STIX bundles in `tip-feed/stix-bundles/` are regenerated daily during active collection, versioned by ISO 8601 date:
 
 ```
 stix-bundles/
-├── bundle_2025-01-01.json
-├── bundle_2025-01-02.json
-└── ...
++-- bundle_2025-01-01.json
++-- bundle_2025-01-02.json
++-- bundle_2025-01-03.json
++-- ...
 ```
 
 ---
 
 ## 📝 Research Paper
 
-The full research paper is available in `/report/honeypot_research_paper.pdf`. The paper follows standard IEEE conference paper formatting and covers:
+The full paper is in `/report/honeypot_research_paper.pdf`. It follows IEEE conference formatting and covers:
 
-1. **Abstract** — Deception-based detection methodology and key findings summary
-2. **Introduction** — Problem statement: why passive honeypots matter in modern threat intelligence
-3. **Related Work** — Review of prior honeypot research (Kippo, Glastopf, Project Honey Pot, etc.)
-4. **Methodology** — Deployment architecture, data collection framework, anonymization approach
-5. **Attack Analysis** — 30-day quantitative findings with statistical breakdowns
-6. **TTP Clustering** — K-Means clustering of attacker behavior patterns
-7. **Threat Intelligence Feed Design** — STIX 2.1 implementation and MISP integration
-8. **Limitations** — Honeypot detection evasion, data bias considerations
-9. **Conclusion & Future Work** — Expansion to distributed honeypot network, ML-based TTP classification
+| Section | Content |
+|---|---|
+| Abstract | Deception-based detection methodology and key findings summary |
+| Introduction | Problem statement: passive honeypots in modern threat intelligence |
+| Related Work | Prior honeypot research — Kippo, Glastopf, Project Honey Pot |
+| Methodology | Deployment architecture, data collection, anonymization approach |
+| Attack Analysis | 30-day quantitative findings with statistical breakdowns |
+| TTP Clustering | K-Means clustering of attacker behavior patterns |
+| TIP Feed Design | STIX 2.1 implementation and MISP integration |
+| Limitations | Honeypot detection evasion, data bias considerations |
+| Future Work | Distributed honeypot network, ML-based TTP classification |
 
-### Target Publication Venues
-
+**Target Publication Venues:**
 - IEEE Security & Privacy Workshops
 - USENIX Security Posters & WiPs
-- arXiv cs.CR (preprint)
+- arXiv cs.CR (open-access preprint)
 - SANS Internet Storm Center (public report)
 - VirusTotal Community Blog
 
 ---
 
-## 🔁 Reproducing This Research
+## 🔄 Reproducing This Research
 
-To reproduce the full 30-day experiment independently:
+To independently replicate the 30-day experiment:
 
-1. **Provision** a clean Ubuntu 22.04 VPS with a fresh IP (see Prerequisites)
-2. **Deploy** T-Pot using the provided `deployment/tpot-setup.sh`
-3. **Wait** 30 days — keep the VM running and collecting passively
-4. **Export** logs from Elasticsearch using the Kibana export tool or ES API
-5. **Run** the analysis pipeline (`analysis/ttp_extractor.py`, etc.)
-6. **Generate** your STIX feed with `tip-feed/stix_generator.py`
-7. **Compare** your findings with the reference dataset in `data/aggregated_stats.csv`
+1. Provision a clean Ubuntu 22.04 VPS with a fresh, unused IP
+2. Deploy T-Pot using `deployment/tpot-setup.sh`
+3. Let the honeypot collect passively for 30 days — no interaction needed
+4. Export logs from Elasticsearch via the Kibana export tool or ES REST API
+5. Run the full analysis pipeline in `analysis/`
+6. Generate your STIX feed with `tip-feed/stix_generator.py`
+7. Compare findings against the reference dataset in `data/aggregated_stats.csv`
 
-Each run will produce different results — attacker activity varies by region, IP reputation, and time of year. This variability is part of what makes the research valuable.
+> Each deployment will produce different results — attacker activity varies by IP reputation, geographic region, and time of year. This variability is a feature, not a bug.
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are welcome and encouraged! Please read [CONTRIBUTING.md](CONTRIBUTING.md) before submitting.
+Contributions are welcome! This project improves with community input — whether it's new honeypot service integrations, better analysis scripts, ML models, or documentation improvements.
 
-**Ways to contribute:**
-- Add support for additional honeypot services (e.g., ConPot for ICS/SCADA, Mailoney for SMTP)
-- Improve the STIX 2.1 generation with richer relationship objects
-- Add ML-based attacker clustering models
-- Improve geo-visualization with animated timelines
-- Translate research findings into additional formats (PDF, LaTeX)
-
-**Workflow:**
-```bash
-# Fork the repo and create a feature branch
-git checkout -b feature/your-feature-name
-
-# Make changes and commit
-git commit -m "feat: describe your change"
-
-# Push and open a Pull Request
-git push origin feature/your-feature-name
-```
+Please read **[CONTRIBUTING.md](CONTRIBUTING.md)** for:
+- Development environment setup
+- Branching strategy and commit message conventions
+- Pull request process and review timeline
+- Code style guidelines (Python PEP 8, STIX validation requirements)
+- How to report bugs and suggest features
+- Security disclosure process
 
 ---
 
@@ -455,31 +432,51 @@ git push origin feature/your-feature-name
 
 > This project is conducted in strict accordance with responsible security research principles.
 
-- ✅ **Passive only** — the honeypot captures only *inbound unsolicited* connections; no outbound attacks are ever launched
-- ✅ **IP anonymization** — all IP addresses in public sample data are partially masked (`x.x.x.XXX`)
-- ✅ **Abuse reporting** — malicious IPs are reported to [AbuseIPDB](https://www.abuseipdb.com) upon detection
-- ✅ **Legal compliance** — operations comply with applicable cyber law in the deployment jurisdiction
-- ✅ **No entrapment** — no active solicitation or luring of attackers; the honeypot merely responds to unsolicited scans and connections
-- ✅ **Cloud provider notified** — VPS provider is aware this is a research honeypot deployment
+| Principle | Implementation |
+|---|---|
+| **Passive only** | Captures only inbound unsolicited connections — no outbound attacks |
+| **IP anonymization** | All IPs in public samples are partially masked (`x.x.x.XXX`) |
+| **Abuse reporting** | Malicious IPs are reported to [AbuseIPDB](https://www.abuseipdb.com) upon detection |
+| **Legal compliance** | Operations comply with applicable cyber law in the deployment jurisdiction |
+| **No entrapment** | No active solicitation or luring of attackers |
+| **Provider notification** | VPS provider is notified that this is a research honeypot deployment |
 
-**Before deploying:** Review your VPS provider's Acceptable Use Policy (AUP) and ensure honeypot research is permitted. Most major providers (AWS, DigitalOcean, Hetzner) permit this under research use cases with prior notification.
+Before deploying, review your cloud provider's Acceptable Use Policy (AUP). AWS, DigitalOcean, Hetzner, and Vultr all permit research honeypot deployments under standard research use cases with prior notification.
 
 ---
 
 ## 📜 License
 
-MIT License — see [LICENSE](LICENSE) for details.
+This project is released under two licenses:
 
-This project and all associated data samples, scripts, and documentation are free to use for research and educational purposes. If you use this dataset or methodology in a publication, please cite this repository.
+- **Source Code** — [MIT License](LICENSE)
+  Free to use, modify, and distribute with attribution.
+
+- **Dataset** (anonymized telemetry in `/data`) — [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
+  Free to use in research with citation.
+
+If you use this project or dataset in a publication, please cite:
+
+```bibtex
+@misc{chakraborty2025honeypot,
+  author       = {Chakraborty, Chandra Sekhar},
+  title        = {Deception-Based Threat Detection Using T-Pot Multi-Service Honeypot},
+  year         = {2025},
+  publisher    = {GitHub},
+  howpublished = {\url{https://github.com/ChandraVerse/honeypot-threat-intelligence}}
+}
+```
 
 ---
 
 <p align="center">
   Made with 🛡️ by <a href="https://github.com/ChandraVerse"><strong>Chandra Sekhar Chakraborty</strong></a>
   <br/>
-  Blue Teamer · SOC Analyst Aspirant · Detection Engineer
+  Blue Teamer &nbsp;&middot;&nbsp; SOC Analyst Aspirant &nbsp;&middot;&nbsp; Detection Engineer
   <br/><br/>
-  <a href="https://chandraverse.github.io/chandraverse-portfolio/">🌐 Portfolio</a> ·
-  <a href="https://github.com/ChandraVerse">💻 GitHub</a> ·
+  <a href="https://chandraverse.github.io/chandraverse-portfolio/">🌐 Portfolio</a> &nbsp;&middot;&nbsp;
+  <a href="https://github.com/ChandraVerse">💻 GitHub</a> &nbsp;&middot;&nbsp;
   <a href="https://linkedin.com">🔗 LinkedIn</a>
+  <br/><br/>
+  <em>If this project helped you, consider giving it a ⭐</em>
 </p>
