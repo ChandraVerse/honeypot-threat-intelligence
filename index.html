@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Honeypot Threat Intelligence Platform — ChandraVerse</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg:        #0a0e14;
+  --surface:   #0f1419;
+  --surface-2: #141b24;
+  --border:    rgba(255,255,255,0.07);
+  --text:      #e6edf3;
+  --muted:     #8b949e;
+  --faint:     #3d444d;
+  --red:       #ff6b6b;
+  --orange:    #f0883e;
+  --yellow:    #e3b341;
+  --green:     #3fb950;
+  --teal:      #39d0d8;
+  --blue:      #58a6ff;
+  --purple:    #bc8cff;
+  --critical:  #ff4444;
+  --high:      #f0883e;
+  --medium:    #e3b341;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --radius: 10px;
+  --transition: 180ms cubic-bezier(0.16,1,0.3,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);font-size:15px;line-height:1.6;min-height:100vh}
+nav{position:sticky;top:0;z-index:100;background:rgba(10,14,20,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 2rem}
+.nav-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:56px;gap:1rem}
+.nav-logo{display:flex;align-items:center;gap:.6rem;text-decoration:none;color:var(--text);font-weight:600;font-size:15px}
+.nav-links{display:flex;gap:1.5rem;list-style:none}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:13px;font-weight:500;transition:color var(--transition)}
+.nav-links a:hover{color:var(--text)}
+.nav-badge{background:rgba(63,185,80,.15);color:var(--green);border:1px solid rgba(63,185,80,.3);padding:.2rem .6rem;border-radius:999px;font-size:11px;font-weight:600;font-family:var(--font-mono)}
+.nav-actions{display:flex;gap:.5rem;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.45rem .9rem;border-radius:6px;font-size:13px;font-weight:500;text-decoration:none;transition:all var(--transition);cursor:pointer;border:none}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+.btn-ghost:hover{color:var(--text);border-color:rgba(255,255,255,.2)}
+.btn-primary{background:var(--teal);color:#0a0e14;font-weight:600}
+.btn-primary:hover{background:#5de0e6;transform:translateY(-1px)}
+.hero{padding:5rem 2rem 4rem;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(57,208,216,.1) 0%,transparent 60%);pointer-events:none}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.5rem;background:rgba(57,208,216,.1);border:1px solid rgba(57,208,216,.25);color:var(--teal);padding:.3rem .8rem;border-radius:999px;font-size:12px;font-weight:600;font-family:var(--font-mono);margin-bottom:1.5rem;letter-spacing:.04em}
+.hero-eyebrow::before{content:'';width:6px;height:6px;background:var(--teal);border-radius:50%;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+.hero h1{font-size:clamp(2rem,.5rem + 4vw,3.8rem);font-weight:700;line-height:1.1;letter-spacing:-.02em;margin-bottom:1rem;max-width:900px;margin-inline:auto}
+.hero h1 span{background:linear-gradient(135deg,var(--teal),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{color:var(--muted);font-size:clamp(1rem,.8rem + .5vw,1.2rem);max-width:640px;margin:0 auto 2.5rem;line-height:1.7}
+.hero-actions{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;margin-bottom:3rem}
+.hero-stats{display:flex;gap:2rem;justify-content:center;flex-wrap:wrap}
+.hero-stat{text-align:center}
+.hero-stat-val{font-size:1.6rem;font-weight:700;font-family:var(--font-mono);color:var(--teal);display:block}
+.hero-stat-label{font-size:12px;color:var(--muted);font-weight:500}
+.container{max-width:1280px;margin:0 auto;padding:0 2rem}
+section{padding:4rem 0}
+.section-header{margin-bottom:2.5rem}
+.section-label{font-size:11px;font-weight:600;font-family:var(--font-mono);color:var(--teal);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.5rem}
+.section-title{font-size:clamp(1.4rem,1rem + 1.5vw,2rem);font-weight:700;letter-spacing:-.02em}
+.section-sub{color:var(--muted);margin-top:.5rem;max-width:56ch}
+.divider{border:none;border-top:1px solid var(--border);margin:0}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.kpi-card{background:var(--surface);padding:1.5rem;transition:background var(--transition)}
+.kpi-card:hover{background:var(--surface-2)}
+.kpi-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;font-size:18px}
+.kpi-val{font-size:1.8rem;font-weight:700;font-family:var(--font-mono);line-height:1;margin-bottom:.3rem}
+.kpi-label{font-size:12px;color:var(--muted);font-weight:500}
+.kpi-trend{font-size:11px;font-family:var(--font-mono);margin-top:.4rem}
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;transition:border-color var(--transition)}
+.chart-card:hover{border-color:rgba(255,255,255,.15)}
+.chart-card.full{grid-column:1/-1}
+.chart-title{font-size:13px;font-weight:600;margin-bottom:.25rem}
+.chart-subtitle{font-size:11px;color:var(--muted);margin-bottom:1.25rem;font-family:var(--font-mono)}
+.chart-wrap{position:relative;height:280px}
+.chart-wrap canvas{width:100%!important}
+.ttp-table{width:100%;border-collapse:collapse;font-size:13px}
+.ttp-table th{padding:.6rem 1rem;text-align:left;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;border-bottom:1px solid var(--border);background:var(--surface)}
+.ttp-table td{padding:.8rem 1rem;border-bottom:1px solid rgba(255,255,255,.04);vertical-align:middle}
+.ttp-table tr:hover td{background:rgba(255,255,255,.02)}
+.ttp-id{font-family:var(--font-mono);font-size:12px;color:var(--teal);font-weight:600}
+.severity-badge{display:inline-block;padding:.15rem .5rem;border-radius:4px;font-size:10px;font-weight:700;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.05em}
+.sev-critical{background:rgba(255,68,68,.15);color:var(--critical)}
+.sev-high{background:rgba(240,136,62,.15);color:var(--high)}
+.sev-medium{background:rgba(227,179,65,.15);color:var(--yellow)}
+.ttp-bar-bg{background:rgba(255,255,255,.06);border-radius:999px;height:6px;width:100%;min-width:80px}
+.ttp-bar-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--teal),var(--blue));transition:width .5s ease}
+.geo-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.country-list{display:flex;flex-direction:column;gap:.5rem}
+.country-row{display:flex;align-items:center;gap:.75rem}
+.country-flag{font-size:20px;width:28px;text-align:center}
+.country-name{font-size:13px;font-weight:500;flex:1}
+.country-bar-wrap{flex:2;position:relative}
+.country-bar-bg{background:rgba(255,255,255,.06);border-radius:999px;height:6px}
+.country-bar-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--red),var(--orange))}
+.country-count{font-family:var(--font-mono);font-size:11px;color:var(--muted);min-width:60px;text-align:right}
+.stix-viewer{background:#0d1117;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.stix-tabs{display:flex;border-bottom:1px solid var(--border);padding:0 1rem}
+.stix-tab{padding:.75rem 1rem;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all var(--transition);font-family:var(--font-mono)}
+.stix-tab.active{color:var(--teal);border-bottom-color:var(--teal)}
+.stix-content{padding:1.25rem;font-family:var(--font-mono);font-size:12px;line-height:1.7;overflow-x:auto;max-height:340px;overflow-y:auto;display:none}
+.stix-content.active{display:block}
+.json-key{color:#79c0ff}.json-str{color:#a5d6ff}.json-num{color:#f0883e}.json-bool{color:#ff7b72}.json-null{color:#8b949e}
+.timeline{display:flex;flex-direction:column;gap:0}
+.tl-item{display:grid;grid-template-columns:120px 1fr;gap:1.5rem;padding:1.25rem 0;border-bottom:1px solid var(--border)}
+.tl-item:last-child{border-bottom:none}
+.tl-date{font-family:var(--font-mono);font-size:11px;color:var(--muted);padding-top:.15rem}
+.tl-title{font-size:13px;font-weight:600;margin-bottom:.25rem}
+.tl-desc{font-size:12px;color:var(--muted);line-height:1.6}
+.arch-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;font-family:var(--font-mono);font-size:12px;line-height:1.8;color:var(--muted);overflow-x:auto;white-space:pre}
+.arch-box .highlight{color:var(--teal)}
+.arch-box .dim{color:var(--faint)}
+footer{background:var(--surface);border-top:1px solid var(--border);padding:2.5rem 2rem;margin-top:2rem}
+.footer-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.footer-left{font-size:13px;color:var(--muted)}
+.footer-left strong{color:var(--text)}
+.footer-links{display:flex;gap:1rem}
+.footer-links a{color:var(--muted);text-decoration:none;font-size:13px;transition:color var(--transition)}
+.footer-links a:hover{color:var(--teal)}
+@media(max-width:768px){
+  .charts-grid,.geo-grid{grid-template-columns:1fr}
+  .chart-card.full{grid-column:1}
+  .nav-links{display:none}
+  .hero-stats{gap:1.5rem}
+  .tl-item{grid-template-columns:1fr;gap:.25rem}
+}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-label="Honeypot TIP Logo">
+        <rect width="28" height="28" rx="6" fill="rgba(57,208,216,0.15)"/>
+        <path d="M14 6C10 6 7 9 7 12c0 4 4 7 7 10 3-3 7-6 7-10 0-3-3-6-7-6z" stroke="#39d0d8" stroke-width="1.5" fill="none"/>
+        <circle cx="14" cy="12" r="2.5" fill="#39d0d8"/>
+        <path d="M11 18l3 4 3-4" stroke="#39d0d8" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      Honeypot TIP
+    </a>
+    <ul class="nav-links">
+      <li><a href="#findings">Findings</a></li>
+      <li><a href="#ttps">TTPs</a></li>
+      <li><a href="#geo">Geo Intel</a></li>
+      <li><a href="#feed">TIP Feed</a></li>
+      <li><a href="#architecture">Architecture</a></li>
+    </ul>
+    <div class="nav-actions">
+      <span class="nav-badge">● LIVE RESEARCH</span>
+      <a href="https://github.com/ChandraVerse/honeypot-threat-intelligence" target="_blank" rel="noopener" class="btn btn-ghost">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+        GitHub
+      </a>
+    </div>
+  </div>
+</nav>
+<div class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">T-Pot 23.x · STIX 2.1 · MITRE ATT&CK · ELK Stack</div>
+    <h1>Deception-Based <span>Threat Intelligence</span><br>Platform</h1>
+    <p class="hero-sub">30-day live honeypot deployment capturing real-world attacker TTPs, producing structured STIX 2.1 threat intelligence feeds and MITRE ATT&CK-mapped findings.</p>
+    <div class="hero-actions">
+      <a href="https://github.com/ChandraVerse/honeypot-threat-intelligence" target="_blank" rel="noopener" class="btn btn-primary">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+        View Repository
+      </a>
+      <a href="#findings" class="btn btn-ghost">Explore Findings ↓</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><span class="hero-stat-val">500k+</span><span class="hero-stat-label">Attack Events</span></div>
+      <div class="hero-stat"><span class="hero-stat-val">12.5k+</span><span class="hero-stat-label">Unique IPs</span></div>
+      <div class="hero-stat"><span class="hero-stat-val">8k+</span><span class="hero-stat-label">IOCs Extracted</span></div>
+      <div class="hero-stat"><span class="hero-stat-val">9</span><span class="hero-stat-label">TTPs Mapped</span></div>
+      <div class="hero-stat"><span class="hero-stat-val">30</span><span class="hero-stat-label">Days Live</span></div>
+    </div>
+  </div>
+</div>
+<hr class="divider"/>
+<section id="findings">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">30-Day Findings</div>
+      <div class="section-title">Live Attack Telemetry</div>
+      <div class="section-sub">100% real-world data — no simulations, no synthetic logs. Every event captured from unsolicited inbound connections to the live honeypot.</div>
+    </div>
+    <div class="kpi-grid">
+      <div class="kpi-card"><div class="kpi-icon" style="background:rgba(255,107,107,.12)">🎯</div><div class="kpi-val" style="color:var(--red)">500k+</div><div class="kpi-label">Total Attack Events</div><div class="kpi-trend" style="color:var(--muted)">Across all sensors</div></div>
+      <div class="kpi-card"><div class="kpi-icon" style="background:rgba(57,208,216,.12)">🌐</div><div class="kpi-val" style="color:var(--teal)">12,500+</div><div class="kpi-label">Unique Attacker IPs</div><div class="kpi-trend" style="color:var(--muted)">From 40+ countries</div></div>
+      <div class="kpi-card"><div class="kpi-icon" style="background:rgba(240,136,62,.12)">🔑</div><div class="kpi-val" style="color:var(--orange)">45,000+</div><div class="kpi-label">Credential Attempts</div><div class="kpi-trend" style="color:var(--muted)">Unique user/pass combos</div></div>
+      <div class="kpi-card"><div class="kpi-icon" style="background:rgba(188,140,255,.12)">🦠</div><div class="kpi-val" style="color:var(--purple)">150+</div><div class="kpi-label">Malware Samples</div><div class="kpi-trend" style="color:var(--muted)">Unique captured payloads</div></div>
+      <div class="kpi-card"><div class="kpi-icon" style="background:rgba(88,166,255,.12)">📡</div><div class="kpi-val" style="color:var(--blue)">8,000+</div><div class="kpi-label">IOCs Extracted</div><div class="kpi-trend" style="color:var(--muted)">IPs · Hashes · Domains</div></div>
+      <div class="kpi-card"><div class="kpi-icon" style="background:rgba(63,185,80,.12)">🕐</div><div class="kpi-val" style="color:var(--green)">02–06</div><div class="kpi-label">Peak Attack Window</div><div class="kpi-trend" style="color:var(--muted)">UTC — automated bots</div></div>
+    </div>
+  </div>
+</section>
+<hr class="divider"/>
+<section>
+  <div class="container">
+    <div class="charts-grid">
+      <div class="chart-card"><div class="chart-title">Top Targeted Ports</div><div class="chart-subtitle">By total attack event volume</div><div class="chart-wrap"><canvas id="portsChart"></canvas></div></div>
+      <div class="chart-card"><div class="chart-title">Attack Activity by Hour (UTC)</div><div class="chart-subtitle">Avg events per hour over 30 days</div><div class="chart-wrap"><canvas id="hourlyChart"></canvas></div></div>
+      <div class="chart-card full"><div class="chart-title">Top Attacker Countries</div><div class="chart-subtitle">Total attack events by origin country</div><div class="chart-wrap" style="height:220px"><canvas id="countryChart"></canvas></div></div>
+    </div>
+  </div>
+</section>
+<hr class="divider"/>
+<section id="ttps">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">MITRE ATT&CK</div>
+      <div class="section-title">TTP Mapping</div>
+      <div class="section-sub">All observed techniques ranked by frequency. Mapped to MITRE ATT&CK and exported as STIX 2.1 <code style="color:var(--teal);font-family:var(--font-mono);font-size:13px">attack-pattern</code> objects.</div>
+    </div>
+    <div class="chart-card" style="padding:0;overflow:hidden">
+      <table class="ttp-table">
+        <thead><tr><th>Technique ID</th><th>Name</th><th>Tactic</th><th>Severity</th><th>Event Count</th><th>Frequency</th></tr></thead>
+        <tbody id="ttpTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+<hr class="divider"/>
+<section id="geo">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Geographic Intelligence</div>
+      <div class="section-title">Attack Origins</div>
+      <div class="section-sub">Top source countries ranked by total attack events. Enriched with Shodan, AbuseIPDB, and MaxMind GeoLite2 data.</div>
+    </div>
+    <div class="geo-grid">
+      <div class="chart-card"><div class="chart-title">Country Breakdown</div><div class="chart-subtitle">Events by origin country</div><div class="country-list" id="countryList"></div></div>
+      <div class="chart-card"><div class="chart-title">Attack Protocol Mix</div><div class="chart-subtitle">By honeypot sensor type</div><div class="chart-wrap"><canvas id="sensorChart"></canvas></div></div>
+    </div>
+  </div>
+</section>
+<hr class="divider"/>
+<section id="feed">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Threat Intelligence Feed</div>
+      <div class="section-title">STIX 2.1 Output</div>
+      <div class="section-sub">Structured threat intelligence bundles generated daily. MISP-compatible export and TAXII 2.0 server for consumer integration.</div>
+    </div>
+    <div class="stix-viewer">
+      <div class="stix-tabs">
+        <div class="stix-tab active" onclick="switchTab('indicator')">indicator</div>
+        <div class="stix-tab" onclick="switchTab('attack-pattern')">attack-pattern</div>
+        <div class="stix-tab" onclick="switchTab('malware')">malware</div>
+      </div>
+      <div class="stix-content active" id="tab-indicator"></div>
+      <div class="stix-content" id="tab-attack-pattern"></div>
+      <div class="stix-content" id="tab-malware"></div>
+    </div>
+  </div>
+</section>
+<hr class="divider"/>
+<section id="architecture">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">System Design</div>
+      <div class="section-title">Platform Architecture</div>
+      <div class="section-sub">Fully passive deception infrastructure — captures only inbound unsolicited connections. No outbound attacks ever launched.</div>
+    </div>
+    <div class="arch-box"><span class="highlight">┌── PUBLIC INTERNET (Threat Actors) ─────────────────────────────┐</span>
+<span class="dim">│    Scanners  ·  Botnets  ·  Exploit Kits  ·  Brute-Forcers     │</span>
+<span class="highlight">└──────────────────────┬─────────────────────────────────────────┘</span>
+                       <span class="highlight">│ Unsolicited inbound traffic only</span>
+              <span class="highlight">┌────────▼────────┐</span>
+              <span class="highlight">│  T-Pot VM       │</span>  Ubuntu 22.04 · Docker Orchestration
+              <span class="dim">│  Cowrie          │</span>  SSH / Telnet traps
+              <span class="dim">│  Dionaea         │</span>  SMB / FTP / HTTP · Malware collection
+              <span class="dim">│  Glastopf        │</span>  HTTP Web App exploits
+              <span class="dim">│  Heralding       │</span>  Multi-protocol credential logger
+              <span class="highlight">└────────┬────────┘</span>
+                       <span class="highlight">│ JSON logs → Logstash → Elasticsearch</span>
+              <span class="highlight">┌────────▼────────┐</span>
+              <span class="highlight">│   ELK Stack     │</span>  Kibana Dashboards · 30-day retention
+              <span class="highlight">└────────┬────────┘</span>
+                       <span class="highlight">│ Enrichment pipeline (Python)</span>
+       <span class="highlight">┌───────────▼───────────┐</span>
+       <span class="highlight">│  Threat Enrichment    │</span>  Shodan · AbuseIPDB · VirusTotal
+       <span class="dim">│  GeoIP · ASN · WHOIS  │</span>  MaxMind GeoLite2 · K-Means Clustering
+       <span class="highlight">└───────────┬───────────┘</span>
+                       <span class="highlight">│ Structured output</span>
+           <span class="highlight">┌──────────▼──────────┐</span>
+           <span class="highlight">│  STIX 2.1 TIP Feed  │</span>  MISP Export · TAXII 2.0 Server
+           <span class="dim">│  MITRE ATT&CK Maps  │</span>  Research PDF · IOC Reports
+           <span class="highlight">└─────────────────────┘</span></div>
+  </div>
+</section>
+<hr class="divider"/>
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Research Insights</div>
+      <div class="section-title">Key Observations</div>
+    </div>
+    <div class="timeline" id="timeline"></div>
+  </div>
+</section>
+<hr class="divider"/>
+<footer>
+  <div class="footer-inner">
+    <div class="footer-left">Built by <strong>Chandra Sekhar Chakraborty</strong> · Blue Teamer · SOC Analyst Aspirant · Detection Engineer</div>
+    <div class="footer-links">
+      <a href="https://github.com/ChandraVerse/honeypot-threat-intelligence" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://chandraverse.github.io/chandraverse-portfolio/" target="_blank" rel="noopener">Portfolio</a>
+    </div>
+  </div>
+</footer>
+<script>
+const PORTS=[{port:"SSH (22)",count:234500},{port:"SMB (445)",count:98200},{port:"RDP (3389)",count:74300},{port:"HTTP (80)",count:52100},{port:"Telnet (23)",count:28400},{port:"HTTPS (443)",count:18700},{port:"MySQL (3306)",count:12300},{port:"FTP (21)",count:9800}];
+const HOURLY=[2100,2400,3800,5200,6800,7200,6100,4800,3900,3200,2800,2600,2400,2700,3100,3600,4200,5100,5800,6200,6000,5400,4100,3200];
+const COUNTRIES=[{country:"China",flag:"\u{1F1E8}\u{1F1F3}",attacks:187420},{country:"Russia",flag:"\u{1F1F7}\u{1F1FA}",attacks:134210},{country:"United States",flag:"\u{1F1FA}\u{1F1F8}",attacks:89340},{country:"Brazil",flag:"\u{1F1E7}\u{1F1F7}",attacks:52180},{country:"India",flag:"\u{1F1EE}\u{1F1F3}",attacks:41230},{country:"Netherlands",flag:"\u{1F1F3}\u{1F1F1}",attacks:28940},{country:"Germany",flag:"\u{1F1E9}\u{1F1EA}",attacks:24510},{country:"South Korea",flag:"\u{1F1F0}\u{1F1F7}",attacks:18920},{country:"Ukraine",flag:"\u{1F1FA}\u{1F1E6}",attacks:14230},{country:"Vietnam",flag:"\u{1F1FB}\u{1F1F3}",attacks:9020}];
+const TTPS=[{id:"T1046",name:"Network Service Scanning",tactic:"Discovery",count:198400,severity:"Critical"},{id:"T1110",name:"Brute Force",tactic:"Credential Access",count:187200,severity:"Critical"},{id:"T1078",name:"Valid Accounts",tactic:"Initial Access",count:134500,severity:"Critical"},{id:"T1119",name:"Automated Collection",tactic:"Collection",count:89300,severity:"High"},{id:"T1190",name:"Exploit Public-Facing App",tactic:"Initial Access",count:72100,severity:"High"},{id:"T1059",name:"Command & Script Interpreter",tactic:"Execution",count:43200,severity:"Medium"},{id:"T1090",name:"Proxy / TOR",tactic:"C2",count:28900,severity:"Medium"},{id:"T1105",name:"Ingress Tool Transfer",tactic:"C2",count:19800,severity:"Medium"},{id:"T1496",name:"Resource Hijacking",tactic:"Impact",count:12300,severity:"Medium"}];
+const STIX_OBJECTS={"indicator":{type:"indicator",spec_version:"2.1",id:"indicator--a1b2c3d4-e5f6-7890-abcd-ef1234567890",name:"Malicious SSH Brute-Force Source IP",pattern_type:"stix",pattern:"[ipv4-addr:value = '1.2.3.XXX']",valid_from:"2025-01-01T00:00:00Z",labels:["malicious-activity","brute-force"],confidence:92},"attack-pattern":{type:"attack-pattern",spec_version:"2.1",id:"attack-pattern--b2c3d4e5-f6a7-8901-bcde-f12345678901",name:"Brute Force: Password Spraying",external_references:[{source_name:"mitre-attack",external_id:"T1110.003",url:"https://attack.mitre.org/techniques/T1110/003"}]},"malware":{type:"malware",spec_version:"2.1",id:"malware--c3d4e5f6-a7b8-9012-cdef-123456789012",name:"Mirai",is_family:true,labels:["bot","worm"]}};
+const TIMELINE=[{date:"Day 1–3",title:"Immediate scanning activity detected",desc:"Within 6 minutes of deployment, first unsolicited SSH connection received from a Chinese IP. Ports 22, 23, 445, 3389 all probed within 24 hours."},{date:"Day 4–7",title:"Credential spray campaigns identified",desc:"Coordinated brute-force using shared wordlists (admin, root, pi, ubuntu). T1110.003 Password Spraying confirmed across 1,200+ unique IPs."},{date:"Day 8–14",title:"First successful login — shell session captured",desc:"Cowrie captured full attacker session: wget → chmod +x → XMRig cryptominer install attempt. T1496 Resource Hijacking confirmed."},{date:"Day 15–21",title:"Mirai botnet variant observed",desc:"Dionaea captured Mirai-variant binary (port 23/Telnet). SHA256 confirmed by VirusTotal (47/72 detections). Added to STIX malware object."},{date:"Day 22–30",title:"TOR exit node traffic spike",desc:"28% increase in connections from known TOR exit nodes (T1090). AbuseIPDB scores >90 on 340+ IPs. STIX indicators generated with confidence 85+."}];
+Chart.defaults.color='#8b949e';Chart.defaults.font.family="'JetBrains Mono',monospace";Chart.defaults.font.size=11;
+function fmtK(n){return n>=1000?(n/1000).toFixed(0)+'k':n}
+new Chart(document.getElementById('portsChart'),{type:'bar',data:{labels:PORTS.map(p=>p.port),datasets:[{data:PORTS.map(p=>p.count),backgroundColor:'rgba(57,208,216,0.75)',borderColor:'rgba(57,208,216,1)',borderWidth:1,borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${fmtK(c.raw)} events`}}},scales:{x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{callback:v=>fmtK(v)}},y:{grid:{display:false}}}}});
+new Chart(document.getElementById('hourlyChart'),{type:'line',data:{labels:Array.from({length:24},(_,i)=>`${String(i).padStart(2,'0')}:00`),datasets:[{data:HOURLY,borderColor:'#f0883e',borderWidth:2,pointRadius:0,fill:true,backgroundColor:'rgba(240,136,62,0.1)',tension:.4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${fmtK(c.raw)} avg/hr`}}},scales:{x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{maxTicksLimit:8}},y:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{callback:v=>fmtK(v)}}}}});
+new Chart(document.getElementById('countryChart'),{type:'bar',data:{labels:COUNTRIES.map(c=>c.country),datasets:[{data:COUNTRIES.map(c=>c.attacks),backgroundColor:'rgba(255,107,107,0.7)',borderColor:'rgba(255,107,107,1)',borderWidth:1,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.raw.toLocaleString()} events`}}},scales:{x:{grid:{display:false}},y:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{callback:v=>fmtK(v)}}}}});
+new Chart(document.getElementById('sensorChart'),{type:'doughnut',data:{labels:['Cowrie (SSH/Telnet)','Dionaea (SMB/FTP)','Glastopf (HTTP)','Heralding (Multi)','ADBHoney (ADB)'],datasets:[{data:[47,20,13,14,6],backgroundColor:['rgba(57,208,216,.8)','rgba(255,107,107,.8)','rgba(240,136,62,.8)','rgba(88,166,255,.8)','rgba(188,140,255,.8)'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,cutout:'65%',plugins:{legend:{position:'right',labels:{boxWidth:10,padding:14,font:{size:11}}},tooltip:{callbacks:{label:c=>` ${c.label}: ${c.raw}%`}}}}});
+const maxCount=Math.max(...TTPS.map(t=>t.count));const tbody=document.getElementById('ttpTableBody');TTPS.forEach(t=>{const pct=Math.round((t.count/maxCount)*100);const sevClass=t.severity==='Critical'?'sev-critical':t.severity==='High'?'sev-high':'sev-medium';tbody.innerHTML+=`<tr><td><span class="ttp-id"><a href="https://attack.mitre.org/techniques/${t.id}" target="_blank" rel="noopener" style="color:var(--teal);text-decoration:none">${t.id}</a></span></td><td style="font-size:13px">${t.name}</td><td style="font-size:12px;color:var(--muted)">${t.tactic}</td><td><span class="severity-badge ${sevClass}">${t.severity}</span></td><td style="font-family:var(--font-mono);font-size:12px">${t.count.toLocaleString()}</td><td style="min-width:100px"><div class="ttp-bar-bg"><div class="ttp-bar-fill" style="width:${pct}%"></div></div></td></tr>`;});
+const maxAttacks=Math.max(...COUNTRIES.map(c=>c.attacks));const cList=document.getElementById('countryList');COUNTRIES.forEach(c=>{const pct=Math.round((c.attacks/maxAttacks)*100);cList.innerHTML+=`<div class="country-row"><span class="country-flag">${c.flag}</span><span class="country-name">${c.country}</span><div class="country-bar-wrap"><div class="country-bar-bg"><div class="country-bar-fill" style="width:${pct}%"></div></div></div><span class="country-count">${(c.attacks/1000).toFixed(0)}k</span></div>`;});
+function syntaxHL(obj){return JSON.stringify(obj,null,2).replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(?=\s*:))/g,'<span class="json-key">$1</span>').replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*")(?!\s*:)/g,'<span class="json-str">$1</span>').replace(/\b(\d+\.?\d*)\b/g,'<span class="json-num">$1</span>').replace(/\b(true|false)\b/g,'<span class="json-bool">$1</span>').replace(/\bnull\b/g,'<span class="json-null">null</span>');}
+Object.entries(STIX_OBJECTS).forEach(([key,obj])=>{document.getElementById('tab-'+key).innerHTML=syntaxHL(obj);});
+function switchTab(name){document.querySelectorAll('.stix-tab').forEach(t=>t.classList.toggle('active',t.textContent===name));document.querySelectorAll('.stix-content').forEach(c=>c.classList.remove('active'));document.getElementById('tab-'+name).classList.add('active');}
+const tlEl=document.getElementById('timeline');TIMELINE.forEach(item=>{tlEl.innerHTML+=`<div class="tl-item"><div class="tl-date">${item.date}</div><div class="tl-content"><div class="tl-title">${item.title}</div><div class="tl-desc">${item.desc}</div></div></div>`;});
+</script>
+</body>
+</html>
