@@ -26,11 +26,13 @@ pip-delete-this-directory.txt
 # Data & Secrets
 data/*.mmdb
 data/raw/
+
+# Generated STIX bundles (runtime output, only sample committed)
 tip-feed/stix-bundles/*.json
-!tip-feed/stix-bundles/.gitkeep
+!tip-feed/stix-bundles/bundle_sample.json
+
+# Reports
 report/*.pdf
-report/figures/*.png
-!report/figures/.gitkeep
 
 # API keys & credentials
 *.key
