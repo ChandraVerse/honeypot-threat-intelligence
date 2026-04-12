@@ -1,3 +1,0 @@
-# Runtime-generated figures are placed here by geo_visualizer.py and cluster_analysis.py
-# Files in this directory are excluded from git (see .gitignore: report/figures/*.png)
-# Pre-generated sample figures will be added after the live experiment completes.
