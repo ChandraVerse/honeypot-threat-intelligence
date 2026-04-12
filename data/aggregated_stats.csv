@@ -1,0 +1,31 @@
+date,src_ip,country_code,country_name,dst_port,event_type,event_count,failed_logins,successful_logins,commands_executed,files_downloaded,unique_passwords,abuse_score,vt_malicious,is_scanner,is_tor
+2025-01-01,1.2.3.XXX,CN,China,22,cowrie.login.failed,342,342,0,0,0,87,92,3,FALSE,FALSE
+2025-01-01,5.6.7.XXX,RU,Russia,22,cowrie.login.failed,289,289,0,0,0,74,88,5,FALSE,FALSE
+2025-01-01,9.10.11.XXX,BR,Brazil,22,cowrie.login.success,14,11,3,8,2,11,71,2,FALSE,FALSE
+2025-01-01,13.14.15.XXX,US,United States,445,dionaea.smb.request,1205,0,0,0,0,0,45,0,TRUE,FALSE
+2025-01-01,17.18.19.XXX,NL,Netherlands,80,glastopf.event,567,0,0,0,0,0,62,1,TRUE,FALSE
+2025-01-02,21.22.23.XXX,DE,Germany,22,cowrie.login.failed,421,421,0,0,0,102,95,7,TRUE,TRUE
+2025-01-02,25.26.27.XXX,IN,India,22,cowrie.command.input,23,18,5,12,3,18,55,2,FALSE,FALSE
+2025-01-02,29.30.31.XXX,CN,China,3389,heralding.login.failed,678,678,0,0,0,156,90,4,FALSE,FALSE
+2025-01-02,33.34.35.XXX,RU,Russia,8080,dionaea.http.request,89,0,0,0,1,0,78,6,FALSE,FALSE
+2025-01-03,37.38.39.XXX,US,United States,23,cowrie.login.failed,234,234,0,0,0,45,40,1,FALSE,FALSE
+2025-01-03,41.42.43.XXX,KR,South Korea,443,glastopf.event,345,0,0,0,0,0,30,0,TRUE,FALSE
+2025-01-03,45.46.47.XXX,FR,France,21,heralding.login.failed,156,156,0,0,0,67,55,2,FALSE,FALSE
+2025-01-04,49.50.51.XXX,CN,China,22,cowrie.login.failed,789,789,0,0,0,203,97,8,TRUE,FALSE
+2025-01-04,53.54.55.XXX,UA,Ukraine,22,cowrie.login.success,31,25,6,15,4,25,68,3,FALSE,FALSE
+2025-01-05,57.58.59.XXX,RU,Russia,3306,heralding.login.failed,445,445,0,0,0,89,85,4,FALSE,FALSE
+2025-01-05,61.62.63.XXX,BR,Brazil,22,cowrie.command.input,18,14,4,9,1,14,48,1,FALSE,FALSE
+2025-01-06,65.66.67.XXX,CN,China,5555,adbhoney.login.failed,234,234,0,0,0,12,70,2,TRUE,FALSE
+2025-01-07,69.70.71.XXX,US,United States,445,dionaea.smb.request,2341,0,0,0,0,0,50,0,TRUE,FALSE
+2025-01-07,73.74.75.XXX,VN,Vietnam,22,cowrie.login.failed,567,567,0,0,0,134,82,5,FALSE,FALSE
+2025-01-08,77.78.79.XXX,DE,Germany,80,glastopf.event,678,0,0,0,0,0,67,1,TRUE,FALSE
+2025-01-09,81.82.83.XXX,RU,Russia,22,cowrie.login.failed,445,445,0,0,0,98,91,6,FALSE,TRUE
+2025-01-10,85.86.87.XXX,CN,China,3389,heralding.login.failed,1234,1234,0,0,0,312,94,9,FALSE,FALSE
+2025-01-11,89.90.91.XXX,BR,Brazil,22,cowrie.login.success,45,38,7,21,5,38,72,3,FALSE,FALSE
+2025-01-12,93.94.95.XXX,IN,India,8080,dionaea.http.request,123,0,0,0,2,0,60,4,FALSE,FALSE
+2025-01-13,97.98.99.XXX,US,United States,22,cowrie.login.failed,890,890,0,0,0,234,85,6,TRUE,FALSE
+2025-01-14,101.102.103.XXX,KR,South Korea,22,cowrie.login.failed,345,345,0,0,0,78,45,2,FALSE,FALSE
+2025-01-15,105.106.107.XXX,CN,China,445,dionaea.smb.request,3456,0,0,0,0,0,88,7,TRUE,FALSE
+2025-01-16,109.110.111.XXX,RU,Russia,22,cowrie.command.input,34,28,6,18,6,28,86,5,FALSE,FALSE
+2025-01-17,113.114.115.XXX,DE,Germany,3306,heralding.login.failed,234,234,0,0,0,56,65,2,FALSE,FALSE
+2025-01-18,117.118.119.XXX,FR,France,22,cowrie.login.failed,678,678,0,0,0,178,79,4,FALSE,FALSE

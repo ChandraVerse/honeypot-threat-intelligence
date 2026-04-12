@@ -1,0 +1,147 @@
+# =============================================================================
+# GitHub Actions CI Workflow
+# Honeypot Threat Intelligence Platform
+# ──────────────────────────────────────────────────────────────────────────────
+# Jobs:
+#   1. lint       — flake8 PEP8 style check on all Python scripts
+#   2. test-stix  — validate STIX 2.1 bundle generation with sample data
+#   3. sec-scan   — bandit SAST security scan on Python source
+# =============================================================================
+
+name: CI — Lint, Test & Security Scan
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+
+  # ────────────────────────────────────────────────────────────
+  lint:
+    name: 🔍 Lint Python (flake8 + isort)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install linting tools
+        run: pip install flake8 isort
+
+      - name: Run flake8
+        run: |
+          flake8 analysis/ tip-feed/ \
+            --max-line-length=120 \
+            --extend-ignore=E203,W503,E501 \
+            --exclude=__pycache__,*.egg-info
+
+      - name: Check import ordering (isort)
+        run: |
+          isort --check-only --diff analysis/ tip-feed/
+
+  # ────────────────────────────────────────────────────────────
+  test-stix:
+    name: 🧪 STIX 2.1 Generation Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install stix2 pandas python-dotenv loguru
+
+      - name: Run STIX generator with sample data
+        run: |
+          cd tip-feed
+          python stix_generator.py \
+            --input ../data/aggregated_stats.csv \
+            --output ./stix-bundles/ \
+            --campaign ci-test-run
+
+      - name: Validate STIX bundle exists
+        run: |
+          BUNDLE=$(ls tip-feed/stix-bundles/bundle_*.json 2>/dev/null | head -1)
+          if [ -z "$BUNDLE" ]; then
+            echo "ERROR: No STIX bundle generated"
+            exit 1
+          fi
+          echo "STIX bundle generated: $BUNDLE"
+          python -c "
+import json, sys
+with open('$BUNDLE') as f:
+    b = json.load(f)
+assert b['type'] == 'bundle', 'Not a STIX bundle'
+assert 'objects' in b, 'No objects in bundle'
+assert len(b['objects']) > 0, 'Empty bundle'
+print(f'Bundle valid: {len(b[\"objects\"])} objects')
+"
+
+      - name: Run IOC aggregator with sample data
+        run: |
+          cd analysis
+          pip install pandas loguru rich
+          python ioc_aggregator.py \
+            --input ../data/sample_events.json \
+            --output ../tip-feed/ci-iocs/
+
+      - name: Run TTP extractor in sample mode
+        run: |
+          cd analysis
+          python ttp_extractor.py \
+            --sample \
+            --output ../data/ci-ttp-output/
+
+  # ────────────────────────────────────────────────────────────
+  sec-scan:
+    name: 🔐 Security Scan (Bandit SAST)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Bandit
+        run: pip install bandit[toml]
+
+      - name: Run Bandit SAST scan
+        run: |
+          bandit -r analysis/ tip-feed/ \
+            -ll \
+            --exclude analysis/__pycache__,tip-feed/__pycache__ \
+            -f json -o bandit-report.json || true
+          # Print summary (non-blocking for now)
+          python -c "
+import json
+with open('bandit-report.json') as f:
+    r = json.load(f)
+metrics = r.get('metrics', {})
+print('Bandit SAST Results:')
+for k, v in metrics.get('_totals', {}).items():
+    print(f'  {k}: {v}')
+"
+
+      - name: Upload Bandit report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bandit-security-report
+          path: bandit-report.json
+          retention-days: 30
