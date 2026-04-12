@@ -1,0 +1,100 @@
+# =============================================================================
+# T-Pot Docker Compose Override
+# Customises resource limits and logging for the research honeypot
+# =============================================================================
+version: '3.9'
+
+services:
+
+  # ── Cowrie — SSH / Telnet trap ──────────────────────────────────────────────
+  cowrie:
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
+    logging:
+      driver: json-file
+      options:
+        max-size: '50m'
+        max-file: '7'
+
+  # ── Dionaea — SMB / FTP / HTTP malware collector ────────────────────────────
+  dionaea:
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
+    logging:
+      driver: json-file
+      options:
+        max-size: '50m'
+        max-file: '7'
+
+  # ── Glastopf — HTTP web application honeypot ────────────────────────────────
+  glastopf:
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 256M
+
+  # ── Heralding — multi-protocol credential logger ────────────────────────────
+  heralding:
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 256M
+
+  # ── ADBHoney — Android ADB honeypot ─────────────────────────────────────────
+  adbhoney:
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '0.10'
+          memory: 128M
+
+  # ── ElasticSearch ────────────────────────────────────────────────────────────
+  elasticsearch:
+    restart: always
+    environment:
+      - "ES_JAVA_OPTS=-Xms1g -Xmx2g"
+    deploy:
+      resources:
+        limits:
+          cpus: '2.00'
+          memory: 3G
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+
+  # ── Kibana ──────────────────────────────────────────────────────────────────
+  kibana:
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '1.00'
+          memory: 1G
+
+  # ── Logstash ────────────────────────────────────────────────────────────────
+  logstash:
+    restart: always
+    environment:
+      - "LS_JAVA_OPTS=-Xms512m -Xmx512m"
+    deploy:
+      resources:
+        limits:
+          cpus: '1.00'
+          memory: 1G
