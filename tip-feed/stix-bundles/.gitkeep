@@ -1,0 +1,2 @@
+# Runtime-generated STIX 2.1 bundles are placed here by stix_generator.py
+# Only bundle_sample.json is committed — live bundles are in .gitignore

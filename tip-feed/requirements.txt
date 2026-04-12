@@ -1,0 +1,8 @@
+# TIP Feed — STIX, TAXII, MISP dependencies
+stix2==3.0.1
+taxii2-client==2.3.0
+fastapi==0.111.0
+uvicorn[standard]==0.29.0
+pymisp==2.4.189
+requests==2.31.0
+python-dotenv==1.0.1

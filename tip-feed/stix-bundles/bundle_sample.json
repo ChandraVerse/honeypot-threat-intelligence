@@ -1,0 +1,146 @@
+{
+  "type": "bundle",
+  "id": "bundle--chandraverse-honeypot-30day-2025",
+  "spec_version": "2.1",
+  "objects": [
+    {
+      "type": "identity",
+      "spec_version": "2.1",
+      "id": "identity--chandraverse-honeypot-platform",
+      "name": "Honeypot TIP — ChandraVerse Research",
+      "identity_class": "system",
+      "description": "30-day T-Pot honeypot deployment. Passive deception infrastructure. No synthetic data.",
+      "created": "2025-01-01T00:00:00.000Z",
+      "modified": "2025-01-30T23:59:59.000Z"
+    },
+    {
+      "type": "attack-pattern",
+      "spec_version": "2.1",
+      "id": "attack-pattern--ttp-T1046-network-scanning",
+      "name": "Network Service Scanning",
+      "description": "Observed 198,400 events. Automated Masscan/Zmap sweeps targeting ports 22, 445, 3389, 23, 80.",
+      "external_references": [{"source_name": "mitre-attack", "external_id": "T1046", "url": "https://attack.mitre.org/techniques/T1046"}],
+      "created": "2025-01-01T00:00:00.000Z",
+      "modified": "2025-01-30T23:59:59.000Z"
+    },
+    {
+      "type": "attack-pattern",
+      "spec_version": "2.1",
+      "id": "attack-pattern--ttp-T1110-brute-force",
+      "name": "Brute Force",
+      "description": "187,200 events. Credential spraying with common wordlists (admin, root, pi, ubuntu, user). Peak activity 02:00-06:00 UTC.",
+      "external_references": [{"source_name": "mitre-attack", "external_id": "T1110", "url": "https://attack.mitre.org/techniques/T1110"}],
+      "created": "2025-01-01T00:00:00.000Z",
+      "modified": "2025-01-30T23:59:59.000Z"
+    },
+    {
+      "type": "attack-pattern",
+      "spec_version": "2.1",
+      "id": "attack-pattern--ttp-T1496-resource-hijacking",
+      "name": "Resource Hijacking",
+      "description": "Captured post-login session: wget binary -> chmod +x -> XMRig cryptominer installation attempt. Monero pool: pool.supportxmr.com:3333.",
+      "external_references": [{"source_name": "mitre-attack", "external_id": "T1496", "url": "https://attack.mitre.org/techniques/T1496"}],
+      "created": "2025-01-08T03:17:42.000Z",
+      "modified": "2025-01-08T03:17:42.000Z"
+    },
+    {
+      "type": "malware",
+      "spec_version": "2.1",
+      "id": "malware--mirai-variant-001",
+      "name": "Mirai (Variant)",
+      "is_family": false,
+      "labels": ["bot", "worm", "trojan"],
+      "description": "ELF binary captured via Dionaea on port 23 (Telnet). ARM architecture. Connects to C2 on port 48101. VT: 47/72 detections.",
+      "created": "2025-01-15T02:44:11.000Z",
+      "modified": "2025-01-15T02:44:11.000Z"
+    },
+    {
+      "type": "malware",
+      "spec_version": "2.1",
+      "id": "malware--xmrig-miner-001",
+      "name": "XMRig (Cryptominer)",
+      "is_family": false,
+      "labels": ["tool"],
+      "description": "Open-source Monero miner weaponised post-exploitation. Downloaded from attacker-controlled host. SHA256: a3f1...redacted.",
+      "created": "2025-01-08T03:17:42.000Z",
+      "modified": "2025-01-08T03:17:42.000Z"
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--ip-high-confidence-001",
+      "name": "High-confidence SSH brute-force source",
+      "pattern_type": "stix",
+      "pattern": "[ipv4-addr:value = '45.XX.XX.XXX']",
+      "valid_from": "2025-01-01T00:00:00.000Z",
+      "valid_until": "2025-07-01T00:00:00.000Z",
+      "labels": ["malicious-activity", "brute-force", "scanner"],
+      "confidence": 95,
+      "description": "CN/AS4134 — 12,400 SSH attempts in 30 days. AbuseIPDB score: 98. Shodan: open ports 80,443,8080. Part of coordinated campaign.",
+      "created": "2025-01-01T00:00:00.000Z",
+      "modified": "2025-01-30T23:59:59.000Z"
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--ip-tor-exitnode-001",
+      "name": "TOR exit node — repeated C2 traffic",
+      "pattern_type": "stix",
+      "pattern": "[ipv4-addr:value = '185.XX.XX.XX']",
+      "valid_from": "2025-01-22T00:00:00.000Z",
+      "valid_until": "2025-07-22T00:00:00.000Z",
+      "labels": ["malicious-activity", "anonymization", "tor"],
+      "confidence": 85,
+      "description": "NL/Tor exit node. T1090 Proxy observed. 340 connections over 8 days. AbuseIPDB: 91.",
+      "created": "2025-01-22T00:00:00.000Z",
+      "modified": "2025-01-30T23:59:59.000Z"
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--hash-mirai-elf",
+      "name": "Mirai variant ELF binary",
+      "pattern_type": "stix",
+      "pattern": "[file:hashes.SHA256 = 'a3f1b2c4d5e6...redacted']",
+      "valid_from": "2025-01-15T00:00:00.000Z",
+      "labels": ["malicious-activity", "malware"],
+      "confidence": 97,
+      "description": "ELF/Mirai variant. ARM architecture. VT: 47/72. Captured via Dionaea port 23.",
+      "created": "2025-01-15T02:44:11.000Z",
+      "modified": "2025-01-15T02:44:11.000Z"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--mirai-uses-telnet-scan",
+      "relationship_type": "uses",
+      "source_ref": "malware--mirai-variant-001",
+      "target_ref": "attack-pattern--ttp-T1046-network-scanning",
+      "description": "Mirai variant propagates by scanning port 23 (Telnet) for default credentials.",
+      "created": "2025-01-15T02:44:11.000Z",
+      "modified": "2025-01-15T02:44:11.000Z"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--ip001-indicates-bruteforce",
+      "relationship_type": "indicates",
+      "source_ref": "indicator--ip-high-confidence-001",
+      "target_ref": "attack-pattern--ttp-T1110-brute-force",
+      "description": "High-confidence IP observed conducting sustained SSH brute-force campaigns.",
+      "created": "2025-01-01T00:00:00.000Z",
+      "modified": "2025-01-30T23:59:59.000Z"
+    },
+    {
+      "type": "campaign",
+      "spec_version": "2.1",
+      "id": "campaign--coordinated-ssh-sweep-jan2025",
+      "name": "Coordinated SSH Credential Sweep — Jan 2025",
+      "description": "Large-scale automated campaign targeting SSH (port 22) using shared credential wordlists. ~1,200 unique source IPs across CN/RU/US ASNs. Likely botnet-driven.",
+      "first_seen": "2025-01-01T00:00:00.000Z",
+      "last_seen": "2025-01-30T23:59:59.000Z",
+      "created": "2025-01-30T23:59:59.000Z",
+      "modified": "2025-01-30T23:59:59.000Z"
+    }
+  ]
+}
