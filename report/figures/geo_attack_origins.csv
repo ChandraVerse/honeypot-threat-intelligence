@@ -1,0 +1,12 @@
+country_code,country_name,attack_count,unique_ips,pct_of_total,primary_attack_type
+CN,China,187420,3421,36.1,SSH Brute Force / Botnet Propagation
+RU,Russia,89340,1823,17.2,SMB Exploits / RDP Spraying
+US,United States,54210,2134,10.4,Port Scanning / Web Exploitation
+BR,Brazil,38920,987,7.5,RDP Credential Spray
+IN,India,21340,654,4.1,SSH Brute Force
+NL,Netherlands,18920,234,3.6,TOR Exit Node / Scanning
+DE,Germany,15430,312,3.0,Web Exploitation / Scanning
+UA,Ukraine,12340,289,2.4,SMB / RDP Attacks
+KR,South Korea,9870,198,1.9,SSH Brute Force
+FR,France,8920,167,1.7,Web Scanning
+Other,Various,62280,2283,12.0,Mixed
