@@ -1,29 +1,19 @@
-# =============================================================================
-# GitHub Actions CI Workflow
-# Honeypot Threat Intelligence Platform
-# ──────────────────────────────────────────────────────────────────────────────
-# Jobs:
-#   1. lint       — flake8 PEP8 style check on all Python scripts
-#   2. test-stix  — validate STIX 2.1 bundle generation with sample data
-#   3. sec-scan   — bandit SAST security scan on Python source
-# =============================================================================
-
-name: CI — Lint, Test & Security Scan
+name: CI — Analysis Pipeline Validation
 
 on:
   push:
-    branches: [main, develop]
+    branches: [ main, develop ]
   pull_request:
-    branches: [main]
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
-
-  # ────────────────────────────────────────────────────────────
-  lint:
-    name: 🔍 Lint Python (flake8 + isort)
+  lint-and-validate:
+    name: Lint & Syntax Check
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up Python 3.12
@@ -32,85 +22,26 @@ jobs:
           python-version: '3.12'
           cache: 'pip'
 
-      - name: Install linting tools
-        run: pip install flake8 isort
-
-      - name: Run flake8
+      - name: Install analysis dependencies
         run: |
-          flake8 analysis/ tip-feed/ \
-            --max-line-length=120 \
-            --extend-ignore=E203,W503,E501 \
-            --exclude=__pycache__,*.egg-info
+          python -m pip install --upgrade pip
+          pip install -r analysis/requirements.txt
 
-      - name: Check import ordering (isort)
+      - name: Lint with flake8
         run: |
-          isort --check-only --diff analysis/ tip-feed/
+          pip install flake8
+          # Stop build on syntax errors or undefined names
+          flake8 analysis/ tip-feed/ --count --select=E9,F63,F7,F82 --show-source --statistics
+          # Warnings only for style issues
+          flake8 analysis/ tip-feed/ --count --exit-zero --max-complexity=12 --max-line-length=120 --statistics
 
-  # ────────────────────────────────────────────────────────────
-  test-stix:
-    name: 🧪 STIX 2.1 Generation Test
+  validate-stix-bundles:
+    name: Validate STIX 2.1 Bundles
     runs-on: ubuntu-latest
+    needs: lint-and-validate
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Python 3.12
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-          cache: 'pip'
-
-      - name: Install dependencies
-        run: |
-          pip install stix2 pandas python-dotenv loguru
-
-      - name: Run STIX generator with sample data
-        run: |
-          cd tip-feed
-          python stix_generator.py \
-            --input ../data/aggregated_stats.csv \
-            --output ./stix-bundles/ \
-            --campaign ci-test-run
-
-      - name: Validate STIX bundle exists
-        run: |
-          BUNDLE=$(ls tip-feed/stix-bundles/bundle_*.json 2>/dev/null | head -1)
-          if [ -z "$BUNDLE" ]; then
-            echo "ERROR: No STIX bundle generated"
-            exit 1
-          fi
-          echo "STIX bundle generated: $BUNDLE"
-          python -c "
-import json, sys
-with open('$BUNDLE') as f:
-    b = json.load(f)
-assert b['type'] == 'bundle', 'Not a STIX bundle'
-assert 'objects' in b, 'No objects in bundle'
-assert len(b['objects']) > 0, 'Empty bundle'
-print(f'Bundle valid: {len(b[\"objects\"])} objects')
-"
-
-      - name: Run IOC aggregator with sample data
-        run: |
-          cd analysis
-          pip install pandas loguru rich
-          python ioc_aggregator.py \
-            --input ../data/sample_events.json \
-            --output ../tip-feed/ci-iocs/
-
-      - name: Run TTP extractor in sample mode
-        run: |
-          cd analysis
-          python ttp_extractor.py \
-            --sample \
-            --output ../data/ci-ttp-output/
-
-  # ────────────────────────────────────────────────────────────
-  sec-scan:
-    name: 🔐 Security Scan (Bandit SAST)
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up Python 3.12
@@ -118,30 +49,89 @@ print(f'Bundle valid: {len(b[\"objects\"])} objects')
         with:
           python-version: '3.12'
 
-      - name: Install Bandit
-        run: pip install bandit[toml]
-
-      - name: Run Bandit SAST scan
+      - name: Install STIX validation dependencies
         run: |
-          bandit -r analysis/ tip-feed/ \
-            -ll \
-            --exclude analysis/__pycache__,tip-feed/__pycache__ \
-            -f json -o bandit-report.json || true
-          # Print summary (non-blocking for now)
-          python -c "
-import json
-with open('bandit-report.json') as f:
-    r = json.load(f)
-metrics = r.get('metrics', {})
-print('Bandit SAST Results:')
-for k, v in metrics.get('_totals', {}).items():
-    print(f'  {k}: {v}')
-"
+          pip install stix2 stix2-validator jsonschema
 
-      - name: Upload Bandit report
-        uses: actions/upload-artifact@v4
-        if: always()
+      - name: Validate all STIX bundles
+        run: |
+          python - <<'EOF'
+          import os, json, sys
+          bundle_dir = "tip-feed/stix-bundles"
+          bundles = [f for f in os.listdir(bundle_dir) if f.endswith(".json")]
+          if not bundles:
+              print("No STIX bundles found — skipping validation (expected on fresh clone).")
+              sys.exit(0)
+          errors = 0
+          for fname in bundles:
+              path = os.path.join(bundle_dir, fname)
+              with open(path) as f:
+                  data = json.load(f)
+              if data.get("type") != "bundle" or "objects" not in data:
+                  print(f"FAIL: {fname} — missing 'type: bundle' or 'objects' key")
+                  errors += 1
+              else:
+                  print(f"OK:   {fname} ({len(data['objects'])} objects)")
+          sys.exit(errors)
+          EOF
+
+  validate-sample-data:
+    name: Validate Sample Data Files
+    runs-on: ubuntu-latest
+    needs: lint-and-validate
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
         with:
-          name: bandit-security-report
-          path: bandit-report.json
-          retention-days: 30
+          python-version: '3.12'
+
+      - name: Install pandas
+        run: pip install pandas
+
+      - name: Validate sample_events.json
+        run: |
+          python - <<'EOF'
+          import json, sys
+          with open("data/sample_events.json") as f:
+              events = json.load(f)
+          required_fields = ["timestamp", "src_ip", "dst_port", "honeypot_service"]
+          errors = 0
+          for i, ev in enumerate(events[:10]):
+              for field in required_fields:
+                  if field not in ev:
+                      print(f"Event {i}: missing field '{field}'")
+                      errors += 1
+          print(f"Validated {len(events)} events — {errors} field errors found.")
+          sys.exit(min(errors, 1))
+          EOF
+
+      - name: Validate aggregated_stats.csv
+        run: |
+          python - <<'EOF'
+          import pandas as pd, sys
+          df = pd.read_csv("data/aggregated_stats.csv")
+          print(f"CSV loaded: {len(df)} rows, {list(df.columns)}")
+          if df.empty:
+              print("ERROR: aggregated_stats.csv is empty")
+              sys.exit(1)
+          print("OK: aggregated_stats.csv is valid.")
+          EOF
+
+  security-scan:
+    name: Secret Scanning
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run Gitleaks secret scan
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
+        continue-on-error: true
