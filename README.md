@@ -7,6 +7,7 @@
   <img src="https://img.shields.io/badge/Data-100%25%20Real--World-critical?style=for-the-badge&logo=databricks&logoColor=white" alt="Real-World Data"/>
   <img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge" alt="License: MIT"/>
   <img src="https://img.shields.io/badge/PRs-Welcome-blueviolet?style=for-the-badge&logo=github" alt="PRs Welcome"/>
+  <a href="https://chandraverse.github.io/honeypot-threat-intelligence/"><img src="https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-blue?style=for-the-badge&logo=githubpages&logoColor=white" alt="Live Demo"/></a>
 </p>
 
 <h1 align="center">🍯 Honeypot Threat Intelligence Platform</h1>
@@ -476,7 +477,7 @@ If you use this project or dataset in a publication, please cite:
   <br/><br/>
   <a href="https://chandraverse.github.io/chandraverse-portfolio/">🌐 Portfolio</a> &nbsp;&middot;&nbsp;
   <a href="https://github.com/ChandraVerse">💻 GitHub</a> &nbsp;&middot;&nbsp;
-  <a href="https://linkedin.com">🔗 LinkedIn</a>
+  <a href="https://www.linkedin.com/in/chandra-sekhar-chakraborty/">🔗 LinkedIn</a>
   <br/><br/>
   <em>If this project helped you, consider giving it a ⭐</em>
 </p>
