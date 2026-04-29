@@ -1,11 +1,10 @@
-tactic,technique_id,technique_name,event_count,frequency_pct,severity
-Initial Access,T1190,Exploit Public-Facing Application,89420,17.2,Critical
-Initial Access,T1078,Valid Accounts (Credential Abuse),127340,24.5,Critical
-Execution,T1059,Command and Scripting Interpreter,43210,8.3,Medium
-Discovery,T1046,Network Service Scanning,134200,25.8,Critical
-Credential Access,T1110,Brute Force SSH/RDP/FTP,118900,22.9,Critical
-Command and Control,T1090,Proxy / TOR Exit Node,14320,2.8,Medium
-Collection,T1119,Automated Collection Bot Activity,49130,9.5,High
-Lateral Movement,T1021,Remote Services Exploitation,7480,1.4,Medium
-Persistence,T1098,Account Manipulation,4200,0.8,Low
-Defense Evasion,T1027,Obfuscated Files or Information,3100,0.6,Low
+technique_id,technique_name,tactic,event_count,severity,pct_of_total
+T1046,Network Service Scanning,Discovery,198400,Critical,39.6
+T1110,Brute Force,Credential Access,187200,Critical,37.3
+T1078,Valid Accounts,Initial Access,134500,Critical,26.8
+T1119,Automated Collection,Collection,89300,High,17.8
+T1190,Exploit Public-Facing Application,Initial Access,72100,High,14.4
+T1059,Command and Scripting Interpreter,Execution,43200,Medium,8.6
+T1090,Proxy,Command and Control,28900,Medium,5.8
+T1105,Ingress Tool Transfer,Command and Control,19800,Medium,3.9
+T1496,Resource Hijacking,Impact,12300,Medium,2.5

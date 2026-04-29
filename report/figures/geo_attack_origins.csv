@@ -1,12 +1,12 @@
-country_code,country_name,attack_count,unique_ips,pct_of_total,primary_attack_type
-CN,China,187420,3421,36.1,SSH Brute Force / Botnet Propagation
-RU,Russia,89340,1823,17.2,SMB Exploits / RDP Spraying
-US,United States,54210,2134,10.4,Port Scanning / Web Exploitation
-BR,Brazil,38920,987,7.5,RDP Credential Spray
-IN,India,21340,654,4.1,SSH Brute Force
-NL,Netherlands,18920,234,3.6,TOR Exit Node / Scanning
-DE,Germany,15430,312,3.0,Web Exploitation / Scanning
-UA,Ukraine,12340,289,2.4,SMB / RDP Attacks
-KR,South Korea,9870,198,1.9,SSH Brute Force
-FR,France,8920,167,1.7,Web Scanning
-Other,Various,62280,2283,12.0,Mixed
+rank,country,country_code,total_attacks,pct_of_total,primary_attack_type,unique_ips,top_sensor
+1,China,CN,187420,37.4,Network Scanning / SSH Brute-Force,4210,Cowrie
+2,Russia,RU,134210,26.8,SSH Brute-Force / SMB Exploits,2890,Cowrie
+3,United States,US,89340,17.8,Web Scanning / Credential Spray,1940,Glastopf
+4,Brazil,BR,52180,10.4,SSH Brute-Force / Botnet C2,1120,Cowrie
+5,India,IN,41230,8.2,Port Scanning / Credential Spray,890,Heralding
+6,Netherlands,NL,28940,5.8,TOR Exit Node / Web Exploit,620,Glastopf
+7,Germany,DE,24510,4.9,Automated Scanning / Botnets,530,Cowrie
+8,South Korea,KR,18920,3.8,Port Scanning / ADB Exploit,410,ADBHoney
+9,Ukraine,UA,14230,2.8,SSH Brute-Force / RDP Spray,310,Cowrie
+10,Vietnam,VN,9020,1.8,Botnet Activity / Telnet Exploit,200,Cowrie
+11,Other,XX,42996,8.6,Mixed,1380,Mixed

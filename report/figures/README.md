@@ -1,37 +1,34 @@
-# Research Paper Figures
+# Research Figures
 
-This directory contains all charts, heatmaps, and visualizations referenced in `honeypot_research_paper.pdf`.
+This directory contains all figures referenced in the honeypot research paper and the live interactive dashboard.
+
+---
 
 ## Figure Inventory
 
-| File | Figure # | Description | Script |
+| # | File | Description | Regeneration Script |
 |---|---|---|---|
-| `fig1_attack_volume_timeline.png` | Fig. 1 | Daily attack event volume over 30-day window | `analysis/geo_visualizer.py` |
-| `fig2_geo_attack_map.png` | Fig. 2 | World heatmap of attacker origin countries | `analysis/geo_visualizer.py` |
-| `fig3_top_ports_barchart.png` | Fig. 3 | Top 10 targeted ports by event count | `analysis/ioc_aggregator.py` |
-| `fig4_ttp_heatmap.png` | Fig. 4 | MITRE ATT&CK TTP frequency heatmap | `analysis/ttp_extractor.py` |
-| `fig5_cluster_scatter.png` | Fig. 5 | K-Means attacker behavior cluster scatter plot | `analysis/cluster_analysis.py` |
-| `fig6_credential_wordcloud.png` | Fig. 6 | Most-attempted SSH credential pairs wordcloud | `analysis/ioc_aggregator.py` |
-| `fig7_hourly_heatmap.png` | Fig. 7 | Attack volume by hour-of-day vs day-of-week | `analysis/geo_visualizer.py` |
-| `fig8_malware_family_pie.png` | Fig. 8 | Distribution of captured malware families | `analysis/ttp_extractor.py` |
+| 1 | `fig1_architecture.png` | Full platform architecture diagram | Manual / draw.io export |
+| 2 | `fig2_ttp_frequency.png` | TTP frequency heatmap (MITRE ATT&CK) | `python analysis/geo_visualizer.py --chart ttp` |
+| 3 | `fig3_hourly_distribution.png` | Hourly attack distribution heatmap (24h × 7d) | `python analysis/geo_visualizer.py --chart hourly` |
+| 4 | `fig4_geo_origins.png` | Geographic attack origins world map | `python analysis/geo_visualizer.py --chart geo` |
+| 5 | `fig5_port_distribution.png` | Top targeted ports bar chart | `python analysis/geo_visualizer.py --chart ports` |
+| 6 | `fig6_sensor_mix.png` | Attack protocol distribution by sensor | `python analysis/geo_visualizer.py --chart sensor` |
+| 7 | `fig7_mirai_timeline.png` | Mirai infection chain event timeline | `python analysis/geo_visualizer.py --chart timeline` |
+| 8 | `fig8_stix_bundle_schema.png` | STIX 2.1 bundle object relationship diagram | Manual / draw.io export |
 
-## Regenerating Figures
+---
 
-All figures are reproducible from the dataset in `data/`:
+## Data Sources
 
-```bash
-cd analysis/
-pip install -r requirements.txt
+- `ttp_frequency_data.csv` — Raw TTP counts used for Figure 2
+- `hourly_attack_distribution.csv` — 24h × 7d matrix used for Figure 3
+- `geo_attack_origins.csv` — Country-level counts used for Figure 4
 
-# Regenerate all figures
-python geo_visualizer.py --output ../report/figures/
-python ttp_extractor.py --days 30 --output ../data/ --figures ../report/figures/
-python cluster_analysis.py --output ../report/figures/
-```
+---
 
-## Figure Notes
+## Notes
 
-- All geographic figures use **MaxMind GeoLite2** database for IP-to-location mapping
-- Attacker IPs are anonymized before any public-facing visualization
-- Color scheme follows **MITRE ATT&CK Navigator** conventions for TTP heatmaps
-- Cluster analysis uses **K=5** determined by elbow method (see paper Section IV-C)
+- All IP addresses in figure data are partially anonymized per responsible disclosure practices.
+- Figures 1 and 8 are exported from draw.io diagrams; source `.drawio` files are available on request.
+- All other figures are generated programmatically and are fully reproducible from the CSV data above.
