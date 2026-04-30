@@ -1,6 +1,7 @@
 <!-- Banner -->
 <p align="center">
-  <img src="https://img.shields.io/badge/Status-Active%20Research-brightgreen?style=for-the-badge&logo=statuspage&logoColor=white" alt="Status: Active Research"/>
+  <img src="https://img.shields.io/badge/Status-Completed%20v1.2.0-brightgreen?style=for-the-badge&logo=statuspage&logoColor=white" alt="Status: Completed v1.2.0"/>
+  <img src="https://img.shields.io/github/actions/workflow/status/ChandraVerse/honeypot-threat-intelligence/ci.yml?branch=main&style=for-the-badge&logo=githubactions&logoColor=white&label=CI" alt="CI Status"/>
   <img src="https://img.shields.io/badge/T--Pot-23.x-0078D4?style=for-the-badge&logo=docker&logoColor=white" alt="T-Pot 23.x"/>
   <img src="https://img.shields.io/badge/MITRE%20ATT%26CK-Mapped-red?style=for-the-badge&logo=target&logoColor=white" alt="MITRE ATT&CK"/>
   <img src="https://img.shields.io/badge/STIX%202.1-TIP%20Feed-orange?style=for-the-badge&logo=json&logoColor=white" alt="STIX 2.1"/>
@@ -111,6 +112,8 @@ The platform automatically ingests all captured events into an **ELK Stack** (El
 | **Analysis** | Python 3.12 · Pandas · GeoPandas · Matplotlib | Statistical analysis and visualization |
 | **Infrastructure** | Ubuntu 22.04 LTS on AWS / DigitalOcean / Hetzner | Cloud-hosted honeypot deployment |
 | **Dashboards** | Kibana · Attack Origin Geo Maps | Real-time monitoring and exploration |
+| **CI/CD** | GitHub Actions (lint · STIX validation · data checks · secret scan) | Automated quality assurance |
+| **Tests** | pytest · unit tests for ttp_extractor, stix_generator, ioc_aggregator | Validated pipeline reliability |
 
 ---
 
@@ -147,12 +150,29 @@ honeypot-threat-intelligence/
 +-- data/                          # Anonymized sample datasets
 |   +-- sample_events.json         # Sample attack events (sanitized IPs)
 |   +-- aggregated_stats.csv       # 30-day aggregated statistics
+|   +-- ioc_report_sample.csv      # Sample IOC report
+|   +-- credentials_wordlist_sample.txt  # Captured credential patterns
 |
 +-- report/                        # Research paper & supporting figures
+|   +-- findings_summary.md        # 30-day findings summary
 |   +-- honeypot_research_paper.pdf
 |   +-- figures/                   # Charts, heatmaps, TTP visualizations
 |
++-- tests/                         # Unit test suite
+|   +-- conftest.py                # Shared pytest fixtures
+|   +-- test_ttp_extractor.py      # TTP mapping engine tests
+|   +-- test_stix_generator.py     # STIX bundle generation tests
+|   +-- test_ioc_aggregator.py     # IOC aggregation tests
+|
++-- .github/
+|   +-- workflows/ci.yml           # GitHub Actions CI (4 jobs)
+|   +-- ISSUE_TEMPLATE/
+|   +-- PULL_REQUEST_TEMPLATE.md
+|   +-- SECURITY.md
+|
++-- index.html                     # Standalone interactive dashboard
 +-- .env.example                   # Environment variable template
++-- CHANGELOG.md                   # Version history
 +-- CONTRIBUTING.md                # Contribution guidelines
 +-- LICENSE                        # MIT License + CC BY 4.0 (Dataset)
 +-- README.md
@@ -267,6 +287,17 @@ python misp_export.py --stix-dir stix-bundles/ --output misp_events.json
 3. Upload each `.ndjson` file from the `dashboards/` folder
 4. Set the index pattern to `logstash-*`
 
+### Step 7 — Run Tests
+
+Verify the full analysis pipeline with the included unit test suite:
+
+```bash
+pip install pytest
+pytest tests/ -v
+```
+
+All three modules — `ttp_extractor`, `stix_generator`, and `ioc_aggregator` — have full coverage via shared fixtures in `tests/conftest.py`.
+
 ---
 
 ## 📊 30-Day Findings
@@ -362,7 +393,7 @@ All TTP mappings are included in the STIX 2.1 bundles as `attack-pattern` object
 
 ### Feed Versioning
 
-STIX bundles in `tip-feed/stix-bundles/` are regenerated daily during active collection, versioned by ISO 8601 date:
+STIX bundles in `tip-feed/stix-bundles/` are versioned by ISO 8601 date:
 
 ```
 stix-bundles/
@@ -409,7 +440,8 @@ To independently replicate the 30-day experiment:
 4. Export logs from Elasticsearch via the Kibana export tool or ES REST API
 5. Run the full analysis pipeline in `analysis/`
 6. Generate your STIX feed with `tip-feed/stix_generator.py`
-7. Compare findings against the reference dataset in `data/aggregated_stats.csv`
+7. Run `pytest tests/ -v` to validate pipeline correctness
+8. Compare findings against the reference dataset in `data/aggregated_stats.csv`
 
 > Each deployment will produce different results — attacker activity varies by IP reputation, geographic region, and time of year. This variability is a feature, not a bug.
 
@@ -477,7 +509,7 @@ If you use this project or dataset in a publication, please cite:
   <br/><br/>
   <a href="https://chandraverse.github.io/chandraverse-portfolio/">🌐 Portfolio</a> &nbsp;&middot;&nbsp;
   <a href="https://github.com/ChandraVerse">💻 GitHub</a> &nbsp;&middot;&nbsp;
-  <a href="https://www.linkedin.com/in/chandra-sekhar-chakraborty/">🔗 LinkedIn</a>
+  <a href="https://www.linkedin.com/in/chandra-sekhar-chakraborty-a9411a286/">🔗 LinkedIn</a>
   <br/><br/>
   <em>If this project helped you, consider giving it a ⭐</em>
 </p>
